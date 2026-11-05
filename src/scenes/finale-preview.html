@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CENA EM CENA — Grande revelação</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12}
+body{display:grid;place-items:center;font-family:Inter,Arial,sans-serif}
+#stage{height:100dvh;aspect-ratio:9/16;max-width:100vw;position:relative;overflow:hidden;background:#080b12}
+canvas{display:block;width:100%;height:100%}
+#topline{position:absolute;top:5.5%;width:100%;text-align:center;color:#f2d9ad;font-size:9px;letter-spacing:.34em;opacity:.7}
+#tagline{position:absolute;left:8%;right:8%;bottom:9%;text-align:center;color:#f4eee3;font-size:clamp(10px,2.7vw,14px);font-weight:600;letter-spacing:.22em;opacity:0;text-shadow:0 2px 16px #000}
+#controls{position:fixed;right:12px;bottom:12px;color:#ddd;font:12px system-ui}
+#controls button{background:#202938;border:1px solid #526078;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js"}}</script>
+</head><body><main id="stage"><div id="topline">UMA EXPERIÊNCIA PARA TODAS AS GERAÇÕES</div><div id="tagline">TODO FILME COMEÇA COM UMA CENA. E A PRÓXIMA PODE SER SUA.</div></main><div id="controls"><button id="play">Pausar</button></div>
+<script type="module">
+import * as THREE from "three";
+import {createBrick,BRICK_PALETTE} from "../three/createBrick.js";
+const stage=document.querySelector("#stage"),tagline=document.querySelector("#tagline");
+const params=new URLSearchParams(location.search),fixed=params.has("frame")?Math.max(0,Math.min(209,Number(params.get("frame")))):null;
+const D=7;let paused=fixed!==null,time=fixed===null?0:fixed/30,last=performance.now();
+const scene=new THREE.Scene();scene.background=new THREE.Color("#080b12");scene.fog=new THREE.FogExp2("#080b12",.018);
+const camera=new THREE.PerspectiveCamera(32,9/16,.1,100);camera.position.set(0,.15,19);camera.lookAt(0,.15,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;renderer.shadowMap.enabled=true;stage.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight("#d9e4ff","#100e18",1.15));
+const key=new THREE.SpotLight("#ffd18a",420,45,Math.PI/3,.6,1);key.position.set(-5,9,9);key.target.position.set(0,0,0);key.castShadow=true;scene.add(key,key.target);
+const blue=new THREE.PointLight("#3979d2",110,30,2);blue.position.set(6,1,-4);scene.add(blue);
+const red=new THREE.PointLight("#e72b20",55,20,2);red.position.set(-6,-2,2);scene.add(red);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshStandardMaterial({color:"#111722",roughness:.28,metalness:.28}));floor.rotation.x=-Math.PI/2;floor.position.y=-5.3;scene.add(floor);
+const back=new THREE.Mesh(new THREE.PlaneGeometry(24,20),new THREE.MeshBasicMaterial({color:"#0b101a"}));back.position.z=-7;scene.add(back);
+const glow=new THREE.Mesh(new THREE.PlaneGeometry(12,12),new THREE.MeshBasicMaterial({color:"#172b4b",transparent:true,opacity:.18,depthWrite:false}));glow.position.set(0,0,-6.8);scene.add(glow);
+const palette=[BRICK_PALETTE.red,BRICK_PALETTE.yellow,BRICK_PALETTE.blue,"#f1eee6"];
+const font={
+ C:["01111","11000","10000","10000","10000","11000","01111"],
+ E:["11111","10000","10000","11110","10000","10000","11111"],
+ N:["10001","11001","10101","10011","10001","10001","10001"],
+ A:["01110","10001","10001","11111","10001","10001","10001"],
+ M:["10001","11011","10101","10101","10001","10001","10001"]
+};
+const lines=["CENA","EM","CENA"],cell=.255,gap=.15,lineGap=.52;
+const totalHeight=3*7*cell+2*lineGap;
+const blocks=[];
+let index=0;
+lines.forEach((line,lineIndex)=>{
+ const letters=[...line],width=letters.length*5*cell+(letters.length-1)*gap;
+ let cursor=-width/2;
+ const yTop=totalHeight/2-lineIndex*(7*cell+lineGap);
+ letters.forEach(letter=>{
+  const bitmap=font[letter];
+  for(let row=0;row<7;row++)for(let col=0;col<5;col++)if(bitmap[row][col]==="1"){
+   const brick=createBrick({color:palette[(index+lineIndex)%palette.length],studsX:1,studsZ:1,bodyHeight:.92,studHeight:.22,studRadius:.29,bevel:.055,roughness:.22});
+   brick.scale.setScalar(cell*.94);brick.rotation.x=Math.PI/2;
+   const tx=cursor+col*cell+cell/2,ty=yTop-row*cell-cell/2;
+   const angle=index*2.399,rad=7.5+(index%5)*.45;
+   const sx=Math.cos(angle)*rad,sy=Math.sin(angle)*rad*.8;
+   brick.position.set(sx,sy,((index%7)-3)*.35);
+   scene.add(brick);
+   blocks.push({mesh:brick,from:new THREE.Vector3(sx,sy,((index%7)-3)*.35),to:new THREE.Vector3(tx,ty,0),delay:.55+(index%47)*.018,spin:(index%2?1:-1)*2.4});
+   index++;
+  }
+  cursor+=5*cell+gap;
+ });
+});
+// A sculpted red nameplate, revealed only after the title has assembled.
+const plaque=new THREE.Group();scene.add(plaque);
+const redMat=new THREE.MeshPhysicalMaterial({color:"#d91f1b",roughness:.2,clearcoat:1});
+const plate=new THREE.Mesh(new THREE.BoxGeometry(2.5,.88,.34),redMat);plate.castShadow=true;plaque.add(plate);
+for(let x of [-.82,0,.82]){const stud=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,.1,24),redMat);stud.position.set(x,.49,0);plaque.add(stud);}
+const logoCanvas=document.createElement("canvas");logoCanvas.width=800;logoCanvas.height=300;
+const ctx=logoCanvas.getContext("2d");ctx.clearRect(0,0,800,300);ctx.font="900 225px Arial Black, Arial, sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineJoin="round";ctx.strokeStyle="#fff";ctx.lineWidth=22;ctx.strokeText("LEGO",400,155);ctx.fillStyle="#fff";ctx.fillText("LEGO",400,155);
+const tex=new THREE.CanvasTexture(logoCanvas);tex.colorSpace=THREE.SRGBColorSpace;
+const logo=new THREE.Mesh(new THREE.PlaneGeometry(2.08,.78),new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide}));logo.position.set(0,0,.19);plaque.add(logo);
+plaque.position.set(0,-3.25,.2);plaque.scale.setScalar(.001);
+const particles=[];
+const particleGeo=new THREE.SphereGeometry(.035,8,8);
+for(let i=0;i<90;i++){const mat=new THREE.MeshBasicMaterial({color:palette[i%palette.length]});const p=new THREE.Mesh(particleGeo,mat);const a=i*2.4,r=5+(i%9)*.55;p.position.set(Math.cos(a)*r,Math.sin(a)*r,(i%11)-5);scene.add(p);particles.push({mesh:p,a,r,speed:.3+(i%7)*.08});}
+const ease=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+function renderAt(t){
+ const p=t/D;camera.position.set(.18*Math.sin(t*.35),.1+(.2*p),19-1.7*ease(t/5.8));camera.lookAt(0,.05,0);
+ blocks.forEach(o=>{const q=ease((t-o.delay)/1.25);o.mesh.position.copy(o.from).lerp(o.to,q);o.mesh.rotation.z=(1-q)*o.spin;});
+ const reveal=ease((t-4.45)/.75);plaque.scale.setScalar(.001+reveal*.92);plaque.rotation.y=(1-reveal)*.5;plaque.position.y=-3.25+reveal*.13;
+ particles.forEach(o=>{const a=o.a+t*o.speed*.14;o.mesh.position.set(Math.cos(a)*o.r,Math.sin(a)*o.r*.85,Math.sin(a*.7)*2);o.mesh.material.opacity=1;});
+ const fade=ease((t-5.55)/.6);tagline.style.opacity=String(fade);
+ renderer.render(scene,camera);
+}
+window.__renderFrame=frame=>{paused=true;time=Math.max(0,Math.min(209,frame))/30;renderAt(time);};
+function loop(now){if(!paused)time=Math.min(D,time+Math.min(.05,(now-last)/1000));last=now;renderAt(time);requestAnimationFrame(loop);}
+if(fixed!==null){renderAt(time);document.querySelector("#controls").style.display="none";}else requestAnimationFrame(loop);
+function toggle(){paused=!paused;document.querySelector("#play").textContent=paused?"Reproduzir":"Pausar";last=performance.now();}
+document.querySelector("#play").addEventListener("click",toggle);addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();toggle();}});
+addEventListener("resize",()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);renderAt(time);});
+</script></body></html>
