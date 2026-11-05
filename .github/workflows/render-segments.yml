@@ -1,0 +1,51 @@
+name: Render campaign segments
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Start Vite
+        run: |
+          npm run dev > /tmp/vite.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/vite.log
+          exit 1
+      - name: Render all five segments
+        run: |
+          npm run render:opening
+          npm run render:universes
+          npm run render:production-studio
+          npm run render:generations
+          npm run render:finale
+      - name: Upload MP4 previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: lego-cena-em-cena-segments
+          path: renders/*.mp4
+          if-no-files-found: error
+          retention-days: 7
