@@ -1,3 +1,5 @@
+> **Briefing atualizado em 05/11/2026:** o roteiro anterior de 30 segundos foi substituído pelo briefing original de seis cenas e 50–60 segundos. Consulte [docs/briefing-original.md](docs/briefing-original.md) e leia as instruções prioritárias no [CLAUDE.md](CLAUDE.md). A estrutura técnica antiga ainda precisa ser adaptada; não considere o vídeo anterior como versão final aprovada.
+
 # LEGO — CENA EM CENA
 
 Projeto acadêmico de produção audiovisual para um vídeo promocional vertical de 30 segundos.
