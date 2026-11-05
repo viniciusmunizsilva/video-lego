@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CENA EM CENA — Opening Preview</title>
+  <style>
+    html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#080b12; }
+    body { display:grid; place-items:center; font-family:system-ui,sans-serif; }
+    #stage { height:100dvh; aspect-ratio:9/16; max-width:100vw; position:relative; overflow:hidden; background:#10131d; }
+    canvas { width:100%; height:100%; display:block; }
+    #label { position:absolute; left:18px; bottom:18px; color:#e8e2d9; font-size:11px; letter-spacing:.16em; opacity:.65; pointer-events:none; }
+    #hint { position:absolute; right:18px; top:18px; color:#e8e2d9; font-size:10px; letter-spacing:.12em; opacity:.55; pointer-events:none; }
+  </style>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+    }}
+  </script>
+</head>
+<body>
+  <main id="stage">
+    <div id="hint">OPENING · 00:00–00:04</div>
+    <div id="label">LEGO · CENA EM CENA — PREVIEW DE PRODUÇÃO</div>
+  </main>
+  <script type="module">
+    import * as THREE from "three";
+    import { createBrick, BRICK_PALETTE } from "../three/createBrick.js";
+
+    const stage = document.querySelector("#stage");
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#080b12");
+    scene.fog = new THREE.FogExp2("#080b12", 0.035);
+
+    const camera = new THREE.PerspectiveCamera(34, 9/16, 0.1, 80);
+    camera.position.set(0, 5.0, 16);
+    camera.lookAt(0, 2.2, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    stage.appendChild(renderer.domElement);
+
+    scene.add(new THREE.HemisphereLight("#8ea8d2", "#130d0a", 1.1));
+
+    const key = new THREE.SpotLight("#ffb34f", 190, 34, Math.PI/5, 0.5, 1.2);
+    key.position.set(-5, 11, 5);
+    key.target.position.set(0, 1.5, 0);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024,1024);
+    scene.add(key, key.target);
+
+    const rim = new THREE.SpotLight("#3979d8", 150, 32, Math.PI/4, 0.65, 1.1);
+    rim.position.set(5, 9, -5);
+    rim.target.position.set(0, 2, 0);
+    scene.add(rim, rim.target);
+
+    const floorMat = new THREE.MeshPhysicalMaterial({
+      color:"#111a2a", roughness:0.22, metalness:0.35, clearcoat:0.8
+    });
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(40,40), floorMat);
+    floor.rotation.x = -Math.PI/2;
+    floor.position.y = 0;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Subtle distant set architecture: kept dark so the projector reads first.
+    const wallMat = new THREE.MeshStandardMaterial({ color:"#111827", roughness:0.85 });
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(18,12,0.5), wallMat);
+    wall.position.set(0,5,-8);
+    scene.add(wall);
+
+    const projector = new THREE.Group();
+    projector.position.set(0,2.0,-0.4);
+    projector.rotation.y = -0.16;
+    scene.add(projector);
+
+    const black = new THREE.MeshPhysicalMaterial({color:"#111318", roughness:0.28, metalness:0.28, clearcoat:0.9});
+    const darkMetal = new THREE.MeshStandardMaterial({color:"#343a45", roughness:0.34, metalness:0.65});
+    const lensMat = new THREE.MeshPhysicalMaterial({color:"#ffb43d", emissive:"#ff8a16", emissiveIntensity:2.6, roughness:0.18, clearcoat:1});
+
+    const housing = new THREE.Mesh(new THREE.BoxGeometry(3.3,1.65,1.7), black);
+    housing.position.y = 0.95;
+    housing.castShadow = true;
+    projector.add(housing);
+
+    const top = new THREE.Mesh(new THREE.BoxGeometry(2.9,0.22,1.45), darkMetal);
+    top.position.set(0,1.82,0);
+    projector.add(top);
+
+    // Two film reels with circular hubs and small radial spokes.
+    function makeReel(x) {
+      const reel = new THREE.Group();
+      const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.82,0.82,0.18,48), darkMetal);
+      disc.rotation.z = Math.PI/2;
+      reel.add(disc);
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,0.22,32), lensMat);
+      hub.rotation.z = Math.PI/2;
+      reel.add(hub);
+      for(let i=0;i<8;i++){
+        const a=i*Math.PI/4;
+        const spoke=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.12,1.2), black);
+        spoke.position.set(0,Math.cos(a)*0.28,Math.sin(a)*0.28);
+        spoke.rotation.x=a;
+        reel.add(spoke);
+      }
+      reel.position.set(x,2.1,-0.05);
+      projector.add(reel);
+      return reel;
+    }
+    const reelA = makeReel(-0.95);
+    const reelB = makeReel(0.95);
+
+    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.43,0.56,1.15,40), darkMetal);
+    barrel.rotation.x = Math.PI/2;
+    barrel.position.set(0,0.95,1.15);
+    projector.add(barrel);
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.34,48), lensMat);
+    lens.position.set(0,0.95,1.74);
+    projector.add(lens);
+    const lensRing = new THREE.Mesh(new THREE.TorusGeometry(0.4,0.07,12,48), black);
+    lensRing.position.set(0,0.95,1.72);
+    projector.add(lensRing);
+
+    // Warm beam, represented by a transparent cone.
+    const beamMat = new THREE.MeshBasicMaterial({color:"#ffbd66", transparent:true, opacity:0.09, depthWrite:false, side:THREE.DoubleSide});
+    const beam = new THREE.Mesh(new THREE.ConeGeometry(2.9,8.4,48,1,true), beamMat);
+    beam.rotation.x = -Math.PI/2;
+    beam.position.set(0,2.0,-3.8);
+    projector.add(beam);
+
+    // Bricks at distinct depth layers for clear 2.5D parallax.
+    const brickSpecs = [
+      {x:-3.5,y:0.42,z:2.8,c:BRICK_PALETTE.blue,sx:2,sz:2,rx:-0.1,rz:0.3},
+      {x:3.4,y:0.5,z:1.8,c:BRICK_PALETTE.yellow,sx:2,sz:3,rx:0.1,rz:-0.4},
+      {x:-2.5,y:3.8,z:-1.8,c:BRICK_PALETTE.red,sx:2,sz:2,rx:0.3,rz:0.25},
+      {x:2.7,y:4.5,z:-3.0,c:BRICK_PALETTE.blue,sx:2,sz:2,rx:-0.2,rz:-0.3},
+      {x:-4.0,y:6.1,z:-5.2,c:BRICK_PALETTE.yellow,sx:2,sz:3,rx:0.2,rz:0.5},
+      {x:4.0,y:6.8,z:-4.8,c:BRICK_PALETTE.red,sx:2,sz:2,rx:-0.2,rz:-0.45}
+    ];
+    const floating = [];
+    for (const spec of brickSpecs) {
+      const b = createBrick({color:spec.c, studsX:spec.sx, studsZ:spec.sz});
+      b.position.set(spec.x,spec.y,spec.z);
+      b.rotation.set(spec.rx,0,spec.rz);
+      b.scale.setScalar(spec.z > 0 ? 0.78 : 0.62);
+      scene.add(b);
+      floating.push({mesh:b, baseY:spec.y, phase:Math.random()*Math.PI*2, speed:0.7+Math.random()*0.45});
+    }
+
+    // Foreground out-of-focus bricks create depth framing.
+    const foreground = [];
+    for(let i=0;i<5;i++){
+      const b=createBrick({color:[BRICK_PALETTE.red,BRICK_PALETTE.yellow,BRICK_PALETTE.blue][i%3],studsX:2,studsZ:2});
+      b.position.set(-4.5+i*2.2,0.28,4.5+Math.random()*0.5);
+      b.rotation.y=Math.random()*0.5;
+      b.scale.setScalar(0.82);
+      scene.add(b);
+      foreground.push(b);
+    }
+
+    const clock = new THREE.Clock();
+    const duration = 4.0;
+    function animate(){
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      const p = (t % duration) / duration;
+      // A restrained push-in and slight lateral drift.
+      camera.position.z = 16 - 1.15 * p;
+      camera.position.x = -0.22 + 0.42 * p;
+      camera.position.y = 5.0 - 0.25 * p;
+      camera.lookAt(0.05 + 0.1*p,2.2,0);
+      projector.rotation.y = -0.16 + Math.sin(t*0.65)*0.025;
+      reelA.rotation.x = t*0.9;
+      reelB.rotation.x = -t*0.72;
+      floating.forEach((o,i)=>{
+        o.mesh.position.y=o.baseY+Math.sin(t*o.speed+o.phase)*0.14;
+        o.mesh.rotation.y=Math.sin(t*0.45+o.phase)*0.18;
+      });
+      foreground.forEach((b,i)=>{ b.rotation.y += 0.0015*(i%2?1:-1); });
+      renderer.render(scene,camera);
+    }
+    animate();
+
+    addEventListener("resize",()=>{
+      const w=stage.clientWidth, h=stage.clientHeight;
+      camera.aspect=w/h; camera.updateProjectionMatrix();
+      renderer.setSize(w,h);
+    });
+  </script>
+</body>
+</html>
