@@ -45,7 +45,7 @@ const specs=[
  [-1.2,.62,0,BRICK_PALETTE.blue],[.8,.62,0,BRICK_PALETTE.red],
  [-.2,1.24,0,BRICK_PALETTE.yellow],[-1.2,1.24,0,BRICK_PALETTE.red],[.8,1.24,0,BRICK_PALETTE.blue]
 ];
-specs.forEach((s,i)=>{const b=createBrick({color:s[3],studsX:2,studsZ:2});b.position.set(s[0],s[1]+2.8,s[2]);b.scale.setScalar(.72);build.add(b);bricks.push({mesh:b,targetY:s[1],delay:.35+i*.27,startX:s[0]+(i%2?2.2:-2.2)});});
+specs.forEach((s,i)=>{const b=createBrick({color:s[3],studsX:2,studsZ:2});b.position.set(s[0],s[1]+2.8,s[2]);b.scale.setScalar(.72);build.add(b);bricks.push({mesh:b,targetY:s[1],targetX:s[0],targetZ:s[2],delay:.35+i*.27,startX:s[0]+(i%2?2.2:-2.2)});});
 const roof=box(build,3.1,.22,1.3,new THREE.MeshStandardMaterial({color:"#c68a32",roughness:.35}),-.2,2.15,0);roof.position.y=4.95;
 const doorway=box(build,.65,1.05,.12,dark,-.2,.52,.67);
 // Minifigure family: original toy-like forms, differentiated by scale and clothes.
@@ -86,7 +86,7 @@ function renderAt(t){
  adult.group.rotation.y=.35+Math.sin(t*1.2)*.04;child.group.rotation.y=-.42+Math.sin(t*1.35+.6)*.06;
  adult.arms.forEach(a=>{a.arm.rotation.z=a.side*(.2+.12*Math.sin(t*2.1));a.hand.position.y=.72+.08*Math.sin(t*2.1+a.side);});
  child.arms.forEach(a=>{a.arm.rotation.z=a.side*(.2+.18*Math.sin(t*2.4+1));a.hand.position.y=.72+.1*Math.sin(t*2.4+a.side);});
- bricks.forEach(o=>{const q=ease((t-o.delay)/.42);o.mesh.position.set(o.startX+(o.mesh.position.x-o.startX)*q,o.targetY+2.8*(1-q),o.mesh.position.z);o.mesh.rotation.y=(1-q)*.32;});
+ bricks.forEach(o=>{const q=ease((t-o.delay)/.42);o.mesh.position.set(o.startX+(o.targetX-o.startX)*q,o.targetY+2.8*(1-q),o.targetZ);o.mesh.rotation.y=(1-q)*.32;});
  looseBricks.forEach((o,i)=>{o.mesh.position.x=o.x+Math.sin(t*1.5+o.phase)*.07;});
  const titles=t<1.65?["A IMAGINAÇÃO NÃO TEM IDADE","UMA PAIXÃO QUE ATRAVESSA GERAÇÕES"]:t<3.45?["CRIAR É MELHOR JUNTOS","CADA PEÇA CONTA UMA HISTÓRIA"]:["MEMÓRIAS QUE SE CONSTROEM","DE GERAÇÃO EM GERAÇÃO"];
  const idx=t<1.65?0:t<3.45?1:2;const local=idx===0?t:idx===1?t-1.65:t-3.45;
