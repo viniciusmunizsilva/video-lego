@@ -1,9 +1,57 @@
-# ATUALIZAÇÃO PRIORITÁRIA — BRIEFING ORIGINAL (05/11/2026)
+# ATUALIZAÇÃO PRIORITÁRIA — BRIEFING ORIGINAL CORRIGIDO (05/11/2026)
 
-> **ESTA SEÇÃO SUBSTITUI AS INSTRUÇÕES CONFLITANTES MAIS ABAIXO.** O briefing original enviado pela organização/amiga do usuário foi recebido depois da primeira versão de 30 segundos. A versão anterior de 30s, seus cinco segmentos, seus timecodes, os sete universos e sua narração de trabalho estão SUPERADOS para a campanha atual. Não os use como roteiro final.
+> **Correção confirmada pelo usuário:** a duração correta é **30 segundos exatos**. O briefing DOCX indicava 50–60 segundos; essa é a única informação incorreta. Preserve todo o restante do briefing: conceito, seis cenas, cinco gêneros/universos da montagem, experiências infantil e adulta, stop motion, galeria, narração, textos, som, estética, entregáveis e restrições. Não use a duração de 60s nem o roteiro antigo de cinco cenas.
 
 ## Fonte obrigatória
-Leia integralmente [docs/briefing-original.md](docs/briefing-original.md), transcrição estruturada do DOCX original. Preserve sua narrativa, termos, seis cenas, textos, locução, objetivos e restrições. Se houver conflito, o DOCX e a transcrição prevalecem sobre este handoff antigo, README, previews e docs individuais anteriores.
+Leia integralmente [docs/briefing-original.md](docs/briefing-original.md). Ele é a versão operacional corrigida do briefing recebido. Em caso de conflito, esta versão corrigida prevalece sobre o DOCX quanto à duração e sobre os documentos antigos do repositório quanto à estrutura de produção.
+
+## Escopo fechado
+- **Duração: 30,00 segundos exatos.**
+- Vertical 9:16, alvo 1080×1920, 30 fps (900 frames).
+- Preservar as seis cenas e todos os conteúdos essenciais do briefing, comprimindo o ritmo e usando montagem concisa:
+  1. 00:00–00:03 — A sessão vai começar.
+  2. 00:03–00:10 — Entre nos universos.
+  3. 00:10–00:17 — Você faz parte da produção.
+  4. 00:17–00:21 — Para todas as gerações.
+  5. 00:21–00:25 — As histórias ganham vida.
+  6. 00:25–00:30 — A grande estreia.
+- Cena 2: mostrar fantasia/castelo/magia, nave/estrelas, super-heróis/cidade, dinossauros e corrida/carros LEGO. Cada take deve ser curto, mas claramente legível.
+- Cena 3: estúdio, câmera, refletores, claquete, cenários sendo montados, credencial, mãos construindo, criança observando pistas e adulto apreciando construção.
+- Cena 4: duas jornadas em montagem paralela: criança explorando/montando e adulto apreciando galeria/construindo; não obrigar atividades conjuntas.
+- Cena 5: stop motion quadro a quadro, galeria de fãs/colecionadores e projeção como créditos finais.
+- Cena 6: composição claquete/tela de cinema, nome e assinatura, espaço para informações oficiais.
+- Narração integral do briefing preservada como texto de referência. Fazer teste cronometrado; não cortar nem reescrever por conta própria. Ajustar pausas/velocidade/mixagem para 30s. Se não couber com inteligibilidade natural, apresentar essa limitação ao usuário e propor opções antes de alterar o texto.
+- Compor títulos, legendas, credencial e informações na pós-produção; não gerar textos longos dentro das imagens.
+- Não inventar informações do evento nem presumir licenças.
+
+## Revisão visual — prioridade imediata
+O usuário aprovou fazer uma cena-piloto de alta qualidade antes de reconstruir todas as cenas. Os frames da primeira versão foram considerados promissores em conceito, mas visualmente simples/antigos, com geometria quadrada, acabamento de plástico fraco, sombras/iluminação rasas e render insuficiente.
+
+1. Não renderize os 30s completos antes de aprovar o piloto.
+2. Comece por um shot de close/médio da minifigura de super-herói na cidade LEGO, como teste de qualidade visual.
+3. Inspecione `src/three/createBrick.js`: já usa RoundedBoxGeometry, MeshPhysicalMaterial, studs e cast/receiveShadow. Investigue também geometrias BoxGeometry/CylinderGeometry/SphereGeometry nas cenas, iluminação, sombras, environment/reflections, composição e pós.
+4. Defina padrão reutilizável de geometria, studs, plástico ABS, reflexos controlados, roughness, key/fill/rim, sombras de contato/oclusão, profundidade, DOF moderado, gradação e antialiasing.
+5. Teste GTAO/SSAO, bloom e DOF apenas se melhorarem o resultado sem prejudicar desempenho. Não adicione efeitos por checklist.
+6. Produza frames antes/depois em 1080×1920 e relatório curto. Aguarde aprovação visual antes de aplicar o padrão ao filme inteiro.
+7. Minifiguras devem parecer brinquedos, não pessoas realistas; visual sofisticado, nostálgico, colorido e acessível, sem aparência infantil genérica, sombria ou de videogame.
+
+## Plano após aprovação
+- Criar animatic/storyboard de 30s com os seis timecodes acima.
+- Reaproveitar código/assets úteis e reconstruir o que não atende ao briefing.
+- Renderizar seis segmentos que somem exatamente 900 frames/30s.
+- Integrar narração PT-BR, legendas, trilha original/licenciada e SFX. Sem áudio autorizado, não fingir que está incorporado: entregar cue sheet.
+- Montar MP4 final 9:16, 1080×1920, 30 fps, 30s, H.264/yuv420p; validar com ffprobe e assistir inteiro.
+- Atualizar GitHub Actions para renderizar seis segmentos, montar filme e publicar artifacts.
+- Não inventar datas, local, horário, preço, programação, inscrições, logo oficial ou licenças.
+- Não declarar renderização, revisão ou aprovação sem evidência real.
+
+## Estado técnico
+O repositório ainda contém a estrutura antiga de 30s/cinco cenas. Esta atualização corrige a documentação, mas não converte automaticamente os previews, renderizadores, workflow ou MP4 existente para o novo roteiro de seis cenas. A implementação deve ser atualizada para seis segmentos e 900 frames. O vídeo existente é apenas protótipo, não versão final aprovada.
+
+---
+
+## Fonte obrigatória
+Leia integralmente [docs/briefing-original.md](docs/briefing-original.md), transcrição estruturada do DOCX original. Preserve sua narrativa, termos, seis cenas, textos, locução, objetivos e restrições. Se houver conflito, a versão corrigida em docs/briefing-original.md prevalece sobre README, previews e docs individuais anteriores.
 
 ## Novo escopo fechado
 - Duração-alvo: **60 segundos** (dentro dos 50–60s solicitados).
