@@ -65,3 +65,7 @@ Antes de aprovar qualquer MP4:
 
 ## Renderização determinística
 Os scripts mantêm uma única página Chromium aberta e solicitam cada quadro por índice, em vez de depender do tempo real de reprodução. Isso reduz variação entre quadros e acelera a captura. A sequência dos universos usa 210 quadros (7 segundos × 30 fps).
+
+
+## Renderização automatizada no GitHub
+O workflow `.github/workflows/render-segments.yml` executa os cinco renderizadores em push para `main`/`master` ou por disparo manual e publica os MP4s como artifact por 7 dias. A execução só pode ser considerada bem-sucedida quando o GitHub Actions concluir o job; a revisão visual dos arquivos continua obrigatória.
