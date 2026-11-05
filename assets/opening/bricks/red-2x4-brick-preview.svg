@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+<defs>
+ <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff514c"/><stop offset=".55" stop-color="#ed242b"/><stop offset="1" stop-color="#b90e19"/></linearGradient>
+ <linearGradient id="front" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e52229"/><stop offset="1" stop-color="#a90d16"/></linearGradient>
+ <linearGradient id="side" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b8111a"/><stop offset="1" stop-color="#71070d"/></linearGradient>
+ <linearGradient id="stud" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ff5957"/><stop offset=".5" stop-color="#ed252c"/><stop offset="1" stop-color="#a90b14"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="24"/></filter>
+</defs>
+<ellipse cx="555" cy="800" rx="340" ry="75" fill="#000" opacity=".28" filter="url(#shadow)"/>
+<path d="M230 350 405 505 405 810 230 650Z" fill="url(#side)" stroke="#70070c" stroke-width="5"/>
+<path d="M405 505 875 390 875 690 405 810Z" fill="url(#front)" stroke="#8e0912" stroke-width="5"/>
+<path d="M230 350 700 250 875 390 405 505Z" fill="url(#top)" stroke="#a80c17" stroke-width="5"/>
+<path d="M230 350 700 250 875 390" fill="none" stroke="#ff8b80" stroke-width="9" opacity=".85"/>
+<path d="M230 350 405 505" fill="none" stroke="#ff8b80" stroke-width="7" opacity=".7"/>
+<g fill="url(#stud)" stroke="#8f0710" stroke-width="4">
+ <ellipse cx="305" cy="365" rx="43" ry="25"/><ellipse cx="410" cy="343" rx="43" ry="25"/><ellipse cx="515" cy="321" rx="43" ry="25"/><ellipse cx="620" cy="299" rx="43" ry="25"/>
+ <ellipse cx="385" cy="440" rx="43" ry="25"/><ellipse cx="490" cy="418" rx="43" ry="25"/><ellipse cx="595" cy="396" rx="43" ry="25"/><ellipse cx="700" cy="374" rx="43" ry="25"/>
+</g>
+<g fill="none" stroke="#ff9c91" stroke-width="5" opacity=".75">
+ <path d="M270 360a35 18 0 0 1 65 -3"/><path d="M375 338a35 18 0 0 1 65 -3"/><path d="M480 316a35 18 0 0 1 65 -3"/><path d="M585 294a35 18 0 0 1 65 -3"/>
+ <path d="M350 433a35 18 0 0 1 65 -3"/><path d="M455 411a35 18 0 0 1 65 -3"/><path d="M560 389a35 18 0 0 1 65 -3"/><path d="M665 367a35 18 0 0 1 65 -3"/>
+</g>
+<path d="M420 530 858 421" stroke="#ff8178" stroke-width="4" opacity=".45"/>
+<path d="M423 780 860 665" stroke="#68070c" stroke-width="5" opacity=".4"/>
+</svg>
