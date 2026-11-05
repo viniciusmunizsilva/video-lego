@@ -1,3 +1,49 @@
+# ATUALIZAÇÃO PRIORITÁRIA — BRIEFING ORIGINAL (05/11/2026)
+
+> **ESTA SEÇÃO SUBSTITUI AS INSTRUÇÕES CONFLITANTES MAIS ABAIXO.** O briefing original enviado pela organização/amiga do usuário foi recebido depois da primeira versão de 30 segundos. A versão anterior de 30s, seus cinco segmentos, seus timecodes, os sete universos e sua narração de trabalho estão SUPERADOS para a campanha atual. Não os use como roteiro final.
+
+## Fonte obrigatória
+Leia integralmente [docs/briefing-original.md](docs/briefing-original.md), transcrição estruturada do DOCX original. Preserve sua narrativa, termos, seis cenas, textos, locução, objetivos e restrições. Se houver conflito, o DOCX e a transcrição prevalecem sobre este handoff antigo, README, previews e docs individuais anteriores.
+
+## Novo escopo fechado
+- Duração-alvo: **60 segundos** (dentro dos 50–60s solicitados).
+- Vertical 9:16, Full HD 1080×1920 ou superior, 30 fps como alvo técnico.
+- **Seis cenas:** 01 00:00–00:07; 02 00:07–00:21; 03 00:21–00:34; 04 00:34–00:44; 05 00:44–00:52; 06 00:52–01:00.
+- A cena 2 mostra os cinco tipos de take exigidos no briefing: fantasia/castelo/magia; aventura espacial/nave/estrelas; super-heróis/cidade; dinossauros; corrida/carros LEGO. Não substituir por sete universos do roteiro antigo.
+- A cena 3 precisa incluir estúdio, câmera, refletores, claquete, cenários em montagem, credencial física, mãos construindo, criança explorando pistas e adulto apreciando construção.
+- A cena 4 deve mostrar duas jornadas em montagem paralela: criança explorando/montando; adulto apreciando galeria/construindo. Não obrigar os dois a fazerem a mesma atividade.
+- A cena 5 precisa mostrar stop motion fotografado quadro a quadro, galeria de fãs/colecionadores e projeção como créditos finais.
+- A cena 6 fecha com composição claquete/tela de cinema, nome e slogan, deixando espaço para informações oficiais futuras.
+- Use a narração integral do briefing em docs/briefing-original.md. Não substituir pela locução curta anterior. Atenção: “E se você pudesse entrar nelas?” aparece como texto de edição na cena 1 e também na narração corrida; preserve a frase e resolva sua apresentação no animatic sem apagá-la.
+- Textos, títulos, legendas, credencial, datas e logotipos devem ser compostos na pós-produção/HTML controlado, não gerados dentro das imagens 3D. A credencial é objeto físico sem texto ilegível.
+
+## Revisão visual — prioridade imediata
+O usuário aprovou fazer uma cena-piloto de alta qualidade antes de refazer todas as cenas. Os frames da primeira versão foram considerados promissores em conceito, mas visualmente simples/antigos, com geometria quadrada, acabamento de plástico fraco, sombras/iluminação rasas e render final insuficiente.
+
+1. Não renderize os 60s completos antes de aprovar o piloto.
+2. Comece por um shot de close/médio da **minifigura de super-herói na cidade LEGO** (cena 2), pois permite avaliar minifigura, tijolos, arquitetura, luz e câmera. Este shot é teste de qualidade, não substitui os cinco takes obrigatórios da cena 2.
+3. Inspecione o módulo atual `src/three/createBrick.js`: ele já usa RoundedBoxGeometry, MeshPhysicalMaterial, studs e cast/receiveShadow. Não assuma que basta adicionar bevel/clearcoat. Investigue o que realmente faz o resultado parecer simples: outras geometrias das cenas ainda usam BoxGeometry/CylinderGeometry/SphereGeometry sem bevel; qualidade de sombras, resolução, materiais, environment/reflections, composição e pós.
+4. Faça um padrão visual reutilizável: bordas suavizadas e proporções coerentes; studs bem arredondados; plástico ABS com reflexo controlado (não metalizado/espelhado); pequenas variações de roughness; luz principal, fill e rim; sombras de contato/oclusão; fundo com profundidade; DOF moderado; gradação de cor; antialiasing/resolução de render adequados.
+5. Avalie GTAO/SSAO e bloom/DOF apenas se a implementação funcionar com o pipeline e melhorar a imagem sem destruir desempenho. Use tone mapping/color space coerentes (as cenas atuais já usam ACES e sRGB em alguns casos; unifique após testar). Não adicione efeitos só por checklist.
+6. Produza frames de comparação antes/depois em tamanho final 1080×1920 e um relatório curto com decisões. Aguarde aprovação visual do usuário antes de aplicar o novo padrão ao filme inteiro.
+7. Minifiguras devem continuar brinquedos LEGO, não humanos realistas; cenário sofisticado e colorido, nostálgico, acessível a crianças e adultos, sem visual infantil genérico, sombrio ou de videogame.
+
+## Plano de produção após aprovação do piloto
+- Criar animatic/storyboard temporizado de 60s seguindo o briefing.
+- Reaproveitar código/assets que ainda servirem, mas reconstruir ou reprogramar cenas que não atendam ao roteiro.
+- Fazer seis cenas/segmentos separados, com movimento visível, continuidade de personagem/escala/material/luz.
+- Integrar narração integral PT-BR, legendas, trilha original/licenciada e SFX. Se não houver áudio autorizado, não fingir que está incorporado: entregar cue sheet e registrar pendência.
+- Montar MP4 final 9:16, alvo 1080×1920, 30 fps, 60s, H.264/yuv420p, validar com ffprobe e assistir inteiro.
+- Atualizar GitHub Actions para renderizar seis segmentos, montar filme e publicar artifacts.
+- Não inventar data, local, horário, preço, programação, inscrições, logo oficial ou licenças.
+- Não usar músicas comerciais/franquias protegidas sem autorização.
+- Não afirmar que algo foi renderizado, assistido, aprovado ou validado sem evidência real.
+
+## Situação de execução
+O repositório ainda contém a estrutura antiga de 30s/cinco cenas. Esta alteração documental não converteu automaticamente os previews, renderizadores, workflow ou MP4 existente para o novo briefing. Primeiro atualize storyboard/timeline e faça o piloto visual; depois implemente o restante. O vídeo atual é referência/protótipo, não entrega aprovada.
+
+---
+
 # CLAUDE.md — Handoff de produção | LEGO CENA EM CENA
 
 Este arquivo é o briefing operacional principal para continuar e concluir o filme. Leia-o inteiro antes de alterar qualquer coisa. Trabalhe diretamente neste repositório, preserve o que já está bom e não peça ao usuário para repetir decisões registradas aqui.
