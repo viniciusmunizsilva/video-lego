@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CENA EM CENA — Universos 02</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12}
+body{display:grid;place-items:center;font-family:Inter,system-ui,sans-serif}
+#stage{height:100dvh;aspect-ratio:9/16;max-width:100vw;position:relative;overflow:hidden;background:#080b12}
+canvas{display:block;width:100%;height:100%}
+#eyebrow{position:absolute;top:20px;left:20px;color:#e8e2d9;font-size:9px;letter-spacing:.22em;opacity:.58}
+#caption{position:absolute;left:20px;right:20px;bottom:54px;color:#fff;font-weight:800;font-size:clamp(20px,5vw,34px);letter-spacing:.04em;text-shadow:0 3px 18px #000;opacity:0;transform:translateY(12px);transition:none}
+#subcaption{position:absolute;left:22px;bottom:30px;color:#f5a623;font-size:9px;letter-spacing:.2em;opacity:0}
+#controls{position:fixed;right:12px;bottom:12px;display:flex;gap:8px;align-items:center;color:#ddd;font:12px system-ui}
+#controls button{background:#202938;border:1px solid #526078;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+#controls span{opacity:.7}
+@media(max-aspect-ratio:9/16){#stage{width:100vw;height:auto}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"}}</script>
+</head>
+<body>
+<main id="stage"><div id="eyebrow">CENA EM CENA · UNIVERSOS</div><div id="caption"></div><div id="subcaption">ENTRE EM OUTROS MUNDOS</div></main>
+<div id="controls"><button id="play">Pausar</button><span>SPACE · play/pause</span></div>
+<script type="module">
+import * as THREE from "three";
+import { createBrick, BRICK_PALETTE } from "../three/createBrick.js";
+const stage=document.querySelector("#stage"), caption=document.querySelector("#caption"), sub=document.querySelector("#subcaption");
+const params=new URLSearchParams(location.search), frameParam=params.has("frame")?Math.max(0,Math.min(209,Number(params.get("frame")))):null;
+const duration=7;let paused=frameParam!==null,elapsed=frameParam===null?0:frameParam/30,last=performance.now();
+const scene=new THREE.Scene();scene.background=new THREE.Color("#080b12");scene.fog=new THREE.FogExp2("#080b12",.012);
+const camera=new THREE.PerspectiveCamera(36,9/16,.1,150);camera.position.set(0,5,13);camera.lookAt(0,2,-1);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(stage.clientWidth,stage.clientHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;stage.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight("#a9c6ec","#140d16",1.25));
+const key=new THREE.DirectionalLight("#ffc16b",2.4);key.position.set(-5,11,7);key.castShadow=true;scene.add(key);
+const blue=new THREE.PointLight("#3678db",45,50,2);blue.position.set(5,6,-20);scene.add(blue);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,100),new THREE.MeshPhysicalMaterial({color:"#0d1421",roughness:.26,metalness:.3,clearcoat:.7}));
+floor.rotation.x=-Math.PI/2;floor.position.set(0,-.03,-20);floor.receiveShadow=true;scene.add(floor);
+const black=new THREE.MeshStandardMaterial({color:"#10131d",roughness:.34,metalness:.18});
+const stone=new THREE.MeshStandardMaterial({color:"#53627a",roughness:.78});
+const gold=new THREE.MeshStandardMaterial({color:"#e7a52c",metalness:.55,roughness:.28});
+const red=new THREE.MeshPhysicalMaterial({color:"#df2826",roughness:.25,clearcoat:.8});
+const blueMat=new THREE.MeshPhysicalMaterial({color:"#1769c2",roughness:.22,clearcoat:.85});
+const green=new THREE.MeshStandardMaterial({color:"#397044",roughness:.85});
+const cream=new THREE.MeshStandardMaterial({color:"#d9d0bd",roughness:.55});
+const sets=[];
+function addBox(parent,w,h,d,mat,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function addCylinder(parent,rt,rb,h,mat,x,y,z,n=12){const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,n),mat);m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m;}
+function addBrick(parent,x,y,z,color,sx=2,sz=2,scale=.65,rz=0){const b=createBrick({color,studsX:sx,studsZ:sz});b.position.set(x,y,z);b.rotation.z=rz;b.scale.setScalar(scale);parent.add(b);return b;}
+function addPlatform(z,color="#17243a"){const g=new THREE.Group();g.position.z=z;scene.add(g);addBox(g,8,.5,5,new THREE.MeshStandardMaterial({color,roughness:.52}),0,.25,0);for(let x=-3;x<=3;x+=2)addBrick(g,x,.53,1.7,x%4?BRICK_PALETTE.red:BRICK_PALETTE.yellow,2,2,.48);return g;}
+function makeCastle(z){
+ const g=addPlatform(z,"#1b2940");const s=new THREE.MeshStandardMaterial({color:"#53617a",roughness:.72});
+ addBox(g,3.6,3.1,1.8,s,0,2,-.6);
+ for(const [x,h] of [[-1.65,4.7],[1.65,4.3],[-.75,3.8],[.8,4.1]]){
+  addBox(g,.9,h,.9,s,x,h/2+.5,-.7);
+  const roof=new THREE.Mesh(new THREE.ConeGeometry(.75,1.25,6),new THREE.MeshStandardMaterial({color:"#26354e"}));roof.position.set(x,h+1.05,-.7);g.add(roof);
+ }
+ const moon=new THREE.Mesh(new THREE.SphereGeometry(.8,32,24),new THREE.MeshBasicMaterial({color:"#dce8ff"}));moon.position.set(2.6,6,-2);g.add(moon);
+ // floating magic particles and a small wand-like beam
+ const wand=addCylinder(g,.045,.045,2.2,gold,-2.6,2.4,.6,8);wand.rotation.z=-.7;
+ const orb=new THREE.Mesh(new THREE.SphereGeometry(.2,20,16),new THREE.MeshBasicMaterial({color:"#91c9ff"}));orb.position.set(-2.9,3.8,.5);g.add(orb);
+ return g;
+}
+function makeGalaxy(z){
+ const g=addPlatform(z,"#101a32");const planet=new THREE.Mesh(new THREE.SphereGeometry(1.55,32,24),new THREE.MeshStandardMaterial({color:"#8d9cb0",roughness:.9}));planet.position.set(2.4,4.4,-2);g.add(planet);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(2,.12,10,64),gold);ring.rotation.x=1.15;ring.position.copy(planet.position);g.add(ring);
+ const ship=new THREE.Group();ship.position.set(-.3,2.5,.3);g.add(ship);
+ addBox(ship,2.6,.28,1.0,cream,0,0,0);
+ const nose=new THREE.Mesh(new THREE.ConeGeometry(.48,1.6,4),cream);nose.rotation.z=-Math.PI/2;nose.position.x=1.8;ship.add(nose);
+ for(const x of [-.85,.85]){addBox(ship,.42,.18,2.3,blueMat,x,-.12,0);}
+ const engine=new THREE.PointLight("#6cbfff",35,7);engine.position.set(-1.4,.2,0);ship.add(engine);
+ for(let i=0;i<18;i++){const star=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),new THREE.MeshBasicMaterial({color:"#dce8ff"}));star.position.set((Math.random()-.5)*9,1+Math.random()*6,-2-Math.random()*2);g.add(star);}
+ return g;
+}
+function makeHeroCity(z){
+ const g=addPlatform(z,"#202437");
+ for(let i=0;i<7;i++){const h=2.2+(i%3)*1.15;addBox(g,1.05,h,.9,new THREE.MeshStandardMaterial({color:i%2?"#35435d":"#202b40"}),-3+i, h/2+.5,-1.3);}
+ // generic armored minifigure silhouette on a rooftop, not a named character
+ const hero=new THREE.Group();hero.position.set(0,1.1,.25);g.add(hero);
+ addCylinder(hero,.32,.36,.65,red,0,.55,0,12);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.28,16,12),gold);head.position.y=1.08;hero.add(head);
+ const chest=new THREE.Mesh(new THREE.BoxGeometry(.68,.55,.25),red);chest.position.y=.6;hero.add(chest);
+ const glow=new THREE.PointLight("#55c8ff",18,4);glow.position.set(0,.65,.35);hero.add(glow);
+ const skyline=new THREE.Mesh(new THREE.BoxGeometry(7,.1,.1),gold);skyline.position.set(0,5,-1.6);g.add(skyline);
+ return g;
+}
+function makeDino(z){
+ const g=addPlatform(z,"#172b22");for(let i=0;i<9;i++){const trunk=addCylinder(g,.12,.2,3.8,green,-3.4+i*.85,2.4,-1.5+(i%2)*.5,7);trunk.position.y=2.4;const crown=new THREE.Mesh(new THREE.SphereGeometry(.75,12,10),green);crown.position.set(-3.4+i*.85,4.4,-1.5+(i%2)*.5);g.add(crown);}
+ const dino=new THREE.Group();dino.position.set(0,1.2,.2);g.add(dino);
+ const body=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),new THREE.MeshStandardMaterial({color:"#a9a34d",roughness:.7}));body.scale.set(1.45,.72,.65);body.position.y=1.2;dino.add(body);
+ const head=new THREE.Mesh(new THREE.BoxGeometry(1.05,.62,.65),body.material);head.position.set(.95,2,.05);dino.add(head);
+ const jaw=new THREE.Mesh(new THREE.BoxGeometry(.95,.18,.62),cream);jaw.position.set(1.05,1.66,.08);dino.add(jaw);
+ const eye=new THREE.Mesh(new THREE.SphereGeometry(.09,12,8),new THREE.MeshBasicMaterial({color:"#ffdb4d"}));eye.position.set(1.27,2.22,.38);dino.add(eye);
+ for(const x of [-.75,.7]){const leg=addBox(dino,.35,.85,.42,body.material,x,.42,0);leg.rotation.z=x*.12;}
+ const tail=new THREE.Mesh(new THREE.ConeGeometry(.38,1.8,8),body.material);tail.rotation.z=-Math.PI/2;tail.position.set(-1.75,1.25,0);dino.add(tail);
+ return {g,dino};
+}
+function makeNoirCity(z){
+ const g=addPlatform(z,"#111722");for(let i=0;i<6;i++){const h=2.6+(i%2)*1.4;addBox(g,1.2,h,.85,new THREE.MeshStandardMaterial({color:"#222c3d"}),-3+i*1.2,h/2+.5,-1.5);}
+ const moon=new THREE.Mesh(new THREE.CircleGeometry(1.2,48),new THREE.MeshBasicMaterial({color:"#d9e3f4"}));moon.position.set(2.6,5.4,-2);g.add(moon);
+ // abstract caped night guardian silhouette
+ const cape=new THREE.Mesh(new THREE.ConeGeometry(.85,1.9,4),black);cape.position.set(0,2,.2);cape.rotation.x=Math.PI;g.add(cape);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.32,16,12),black);head.position.set(0,3.25,.2);g.add(head);
+ const ears=new THREE.Mesh(new THREE.ConeGeometry(.12,.55,5),black);ears.position.set(-.19,3.65,.2);g.add(ears);const ears2=ears.clone();ears2.position.x=.19;g.add(ears2);
+ const beam=new THREE.SpotLight("#b9d4ff",45,16,.28,.7,1);beam.position.set(-2,7,2);beam.target.position.set(0,1,-1);g.add(beam,beam.target);
+ return g;
+}
+function makePirate(z){
+ const g=addPlatform(z,"#1c2029");const sea=new THREE.Mesh(new THREE.PlaneGeometry(8,5),new THREE.MeshStandardMaterial({color:"#173e58",roughness:.28,metalness:.25}));sea.rotation.x=-Math.PI/2;sea.position.y=.53;g.add(sea);
+ const ship=new THREE.Group();ship.position.set(0,.7,-.2);g.add(ship);
+ const hull=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.65,4.8,6,1,false,0,Math.PI),new THREE.MeshStandardMaterial({color:"#5a3524",roughness:.65}));hull.rotation.z=Math.PI/2;hull.position.y=.4;ship.add(hull);
+ const mast=addCylinder(ship,.09,.13,4.4,cream,0,2.7,0,8);
+ for(const x of [-.8,.9]){const sail=addBox(ship,1.05,1.7,.08,cream,x,2.65,0);sail.rotation.z=x*.12;}
+ const flag=new THREE.Mesh(new THREE.ConeGeometry(.24,.8,3),red);flag.rotation.z=-Math.PI/2;flag.position.set(.1,5,.0);ship.add(flag);
+ return g;
+}
+function makeTemple(z){
+ const g=addPlatform(z,"#3a2a1d");const sandstone=new THREE.MeshStandardMaterial({color:"#b58b53",roughness:.82});
+ addBox(g,4.8,3.5,1.4,sandstone,0,2.2,-.8);
+ for(let i=0;i<5;i++){const x=-2+i;addCylinder(g,.22,.25,3.6,sandstone,x,2.25,.05,8);}
+ const roof=addBox(g,5.5,.35,1.8,gold,0,4.2,-.8);
+ const stairs=new THREE.Mesh(new THREE.BoxGeometry(2.4,.4,2.4),sandstone);stairs.position.set(0,.7,1.2);g.add(stairs);
+ const idol=new THREE.Mesh(new THREE.OctahedronGeometry(.48),new THREE.MeshPhysicalMaterial({color:"#e6b844",metalness:.8,roughness:.18,emissive:"#6a3c08",emissiveIntensity:.25}));idol.position.set(0,2.1,.6);g.add(idol);
+ const torch1=new THREE.PointLight("#ff9c38",18,6);torch1.position.set(-2,3,.6);g.add(torch1);const torch2=torch1.clone();torch2.position.x=2;g.add(torch2);
+ return g;
+}
+const makers=[makeCastle,makeGalaxy,makeHeroCity,makeDino,makeNoirCity,makePirate,makeTemple];
+const labels=[
+ ["MAGIA E FANTASIA","CASTELOS · FEITIÇOS · DESCOBERTAS"],
+ ["UMA GALÁXIA DISTANTE","NAVES · PLANETAS · AVENTURA"],
+ ["HERÓIS EM AÇÃO","CORAGEM · TECNOLOGIA · IMAGINAÇÃO"],
+ ["AVENTURA JURÁSSICA","SELVA · CRIATURAS · EXPLORAÇÃO"],
+ ["A CIDADE DA NOITE","MISTÉRIO · SOMBRAS · CORAGEM"],
+ ["LENDAS DOS MARES","NAVIOS · TESOUROS · AVENTURA"],
+ ["SEGREDOS ANTIGOS","TEMPLOS · RELÍQUIAS · DESCOBERTA"]
+];
+const dinoRefs=[];
+for(let i=0;i<7;i++){const z=-i*7.8;const result=makers[i](z);if(i===3)dinoRefs.push(result.dino);sets.push({z,group:result.g||result,index:i});}
+const flash=new THREE.Mesh(new THREE.PlaneGeometry(20,30),new THREE.MeshBasicMaterial({color:"#fff",transparent:true,opacity:0,depthWrite:false}));flash.position.set(0,0,2);camera.add(flash);scene.add(camera);
+function smooth(t){return t*t*(3-2*t);}
+function renderAt(t){
+ const p=Math.max(0,Math.min(1,t/duration));
+ const travel=p*7*7.8;
+ camera.position.set(Math.sin(t*.55)*.18,5.1,12.2-travel);
+ camera.lookAt(0,2.15, camera.position.z-9.5);
+ const index=Math.min(6,Math.floor(Math.min(6.999,t)));
+ const local=t-index;
+ const opacity=smooth(Math.min(1,local/.16))*smooth(Math.min(1,(1-local)/.16));
+ caption.textContent=labels[index][0];sub.textContent=labels[index][1];
+ caption.style.opacity=String(opacity);caption.style.transform="translateY("+((1-opacity)*12)+"px)";
+ sub.style.opacity=String(opacity*.85);
+ const cut=Math.max(0,1-Math.abs(local-.94)/.055)*.75;flash.material.opacity=cut;
+ dinoRefs.forEach(d=>{d.rotation.y=Math.sin(t*4)*.12;});
+ sets.forEach((s,i)=>{s.group.rotation.y=Math.sin(t*.6+i)*.025;});
+ renderer.render(scene,camera);
+}
+function loop(now){if(!paused){const dt=Math.min(.05,(now-last)/1000);elapsed=(elapsed+dt)%duration;}last=now;renderAt(elapsed);requestAnimationFrame(loop);}
+if(frameParam!==null){renderAt(elapsed);document.querySelector("#controls").style.display="none";}else requestAnimationFrame(loop);
+function toggle(){paused=!paused;document.querySelector("#play").textContent=paused?"Reproduzir":"Pausar";last=performance.now();}
+document.querySelector("#play").addEventListener("click",toggle);
+addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();toggle();}});
+addEventListener("resize",()=>{const w=stage.clientWidth,h=stage.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);renderAt(elapsed);});
+</script>
+</body></html>
