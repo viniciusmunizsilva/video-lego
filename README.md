@@ -76,3 +76,10 @@ O repositório começou vazio. Esta documentação registra o escopo e a direç�
 - `assets/finale/`
 - `scenes/01-opening/` até `scenes/05-finale/`
 - `audio/` e `renders/`
+
+
+## Atualização de produção — abertura 01
+
+A abertura de 4 segundos foi implementada em Three.js com projetor procedural, peças em profundidade, claquete articulada, batida visual, flash e ponte para um castelo fantástico genérico. A cena possui timeline determinística por quadro (`?frame=0..119`).
+
+O exportador local está em `scripts/render-opening.mjs`. O render final depende de executar localmente as instruções em `scripts/README.md`; o MP4 ainda não foi gerado nem validado nesta sessão. Os efeitos sonoros são cues documentados, não áudio incorporado.
