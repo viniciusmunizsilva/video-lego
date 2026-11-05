@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CENA EM CENA — Bastidores 03</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12}
+body{display:grid;place-items:center;font-family:Inter,system-ui,sans-serif}
+#stage{height:100dvh;aspect-ratio:9/16;max-width:100vw;position:relative;overflow:hidden;background:#080b12}
+canvas{display:block;width:100%;height:100%}
+#eyebrow{position:absolute;top:20px;left:20px;color:#e8e2d9;font-size:9px;letter-spacing:.22em;opacity:.58}
+#caption{position:absolute;left:20px;right:20px;bottom:60px;color:#fff;font-weight:850;font-size:clamp(22px,5.3vw,36px);line-height:1.05;letter-spacing:.015em;text-shadow:0 3px 18px #000;opacity:0}
+#subcaption{position:absolute;left:22px;bottom:30px;color:#f5a623;font-size:9px;letter-spacing:.18em;opacity:0}
+#controls{position:fixed;right:12px;bottom:12px;display:flex;gap:8px;align-items:center;color:#ddd;font:12px system-ui}
+#controls button{background:#202938;border:1px solid #526078;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+@media(max-aspect-ratio:9/16){#stage{width:100vw;height:auto}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"}}</script>
+</head><body>
+<main id="stage"><div id="eyebrow">CENA EM CENA · BASTIDORES</div><div id="caption"></div><div id="subcaption"></div></main>
+<div id="controls"><button id="play">Pausar</button><span>SPACE · play/pause</span></div>
+<script type="module">
+import * as THREE from "three";
+import {createBrick,BRICK_PALETTE} from "../three/createBrick.js";
+const stage=document.querySelector("#stage"),caption=document.querySelector("#caption"),sub=document.querySelector("#subcaption");
+const params=new URLSearchParams(location.search),frameParam=params.has("frame")?Math.max(0,Math.min(209,Number(params.get("frame")))):null;
+const duration=7;let paused=frameParam!==null,elapsed=frameParam===null?0:frameParam/30,last=performance.now();
+const scene=new THREE.Scene();scene.background=new THREE.Color("#090d16");scene.fog=new THREE.FogExp2("#090d16",.018);
+const camera=new THREE.PerspectiveCamera(37,9/16,.1,100);camera.position.set(0,5.2,14);camera.lookAt(0,2,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;stage.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight("#a8c5e8","#15101a",1.1));
+const warm=new THREE.SpotLight("#ffb653",230,42,Math.PI/5,.55,1.1);warm.position.set(-5,11,5);warm.target.position.set(0,1,0);warm.castShadow=true;scene.add(warm,warm.target);
+const cool=new THREE.SpotLight("#397bd5",180,38,Math.PI/4,.6,1);cool.position.set(5,9,-5);cool.target.position.set(0,2,0);scene.add(cool,cool.target);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshPhysicalMaterial({color:"#111a29",roughness:.22,metalness:.35,clearcoat:.8}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(20,13),new THREE.MeshStandardMaterial({color:"#111827",roughness:.9}));wall.position.set(0,6,-7);scene.add(wall);
+const metal=new THREE.MeshStandardMaterial({color:"#3c4655",metalness:.72,roughness:.3});
+const black=new THREE.MeshPhysicalMaterial({color:"#101319",roughness:.28,metalness:.22,clearcoat:.9});
+const white=new THREE.MeshStandardMaterial({color:"#e9e4d9",roughness:.42});
+const red=new THREE.MeshPhysicalMaterial({color:"#df2925",roughness:.24,clearcoat:.85});
+const yellow=new THREE.MeshPhysicalMaterial({color:"#f2c832",roughness:.24,clearcoat:.85});
+const blue=new THREE.MeshPhysicalMaterial({color:"#1769c2",roughness:.22,clearcoat:.9});
+function box(parent,w,h,d,mat,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function cylinder(parent,r1,r2,h,mat,x,y,z,seg=24){const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,seg),mat);m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m;}
+function brick(parent,x,y,z,color,sx=2,sz=2,scale=.7){const b=createBrick({color,studsX:sx,studsZ:sz});b.position.set(x,y,z);b.scale.setScalar(scale);parent.add(b);return b;}
+
+// Studio truss and overhead rig.
+const rig=new THREE.Group();scene.add(rig);
+for(let x of [-5.5,5.5]){cylinder(rig,.07,.07,10,metal,x,5,-3,12);cylinder(rig,.07,.07,10,metal,x,5,3,12);}
+box(rig,11,.14,.14,metal,0,9,-3);box(rig,11,.14,.14,metal,0,9,3);
+for(let x=-4;x<=4;x+=2)box(rig,.06,.06,6,metal,x,9,0);
+
+// Three studio spotlights, with barn doors and glowing lenses.
+const lamps=[];
+for(const [x,z,color] of [[-4,2,"#ffb653"],[0,-2,"#e8efff"],[4,1,"#397bd5"]]){
+ const g=new THREE.Group();g.position.set(x,7.9,z);g.rotation.x=-.38;scene.add(g);
+ const housing=cylinder(g,.48,.56,.9,black,0,0,0,32);housing.rotation.x=Math.PI/2;
+ const lens=new THREE.Mesh(new THREE.CircleGeometry(.37,32),new THREE.MeshBasicMaterial({color}));lens.position.z=.48;g.add(lens);
+ const barn=box(g,1.15,.12,.18,metal,0,-.48,.36);barn.rotation.z=.08;
+ const light=new THREE.SpotLight(color,x===0?170:115,26,.42,.7,1);light.position.set(x,7.4,z);light.target.position.set(0,1.4,0);scene.add(light,light.target);
+ lamps.push({g,light,phase:x*.2});
+}
+
+// Camera dolly and cinema camera body.
+const dolly=new THREE.Group();dolly.position.set(-3.2,.45,2.3);scene.add(dolly);
+const cameraBody=box(dolly,1.55,1.05,1.3,black,0,1.65,0);
+const topHandle=box(dolly,.9,.12,.5,metal,0,2.25,-.1);
+const lensBarrel=cylinder(dolly,.38,.48,.95,metal,0,1.65,.98,32);lensBarrel.rotation.x=Math.PI/2;
+const lensGlass=new THREE.Mesh(new THREE.CircleGeometry(.29,32),new THREE.MeshPhysicalMaterial({color:"#8dc9ff",emissive:"#174d80",emissiveIntensity:1.3,metalness:.2,roughness:.12}));lensGlass.position.set(0,1.65,1.47);dolly.add(lensGlass);
+const cameraWheels=[];
+for(const x of [-.85,.85]){const wheel=cylinder(dolly,.38,.38,.18,black,x,.45,0,32);wheel.rotation.z=Math.PI/2;cameraWheels.push(wheel);}
+for(const x of [-.55,.55])cylinder(dolly,.045,.045,2.2,metal,x,.9,-.1,12);
+
+// Tripod-mounted secondary camera in the background.
+const tripod=new THREE.Group();tripod.position.set(4.1,.1,-1.5);scene.add(tripod);
+for(let i=0;i<3;i++){const leg=cylinder(tripod,.045,.07,2.8,metal,0,1.2,0,10);leg.rotation.z=(i-1)*.38;leg.position.x=(i-1)*.45;leg.position.y=.9;}
+box(tripod,1.1,.7,.75,black,0,2.75,0);cylinder(tripod,.22,.28,.6,metal,0,2.75,.62,24).rotation.x=Math.PI/2;
+
+// Workbench with a miniature scene being assembled.
+const table=new THREE.Group();table.position.set(.3,0,-.5);scene.add(table);
+box(table,6.8,.35,3.2,black,0,1.5,0);
+for(const x of [-3,3])for(const z of [-1.2,1.2])box(table,.18,1.5,.18,metal,x,.75,z);
+const base=box(table,4.6,.22,2.1,new THREE.MeshStandardMaterial({color:"#18263a",roughness:.35}),0,1.8,0);
+const buildParts=[];
+const targetBricks=[
+ {x:-1.3,y:1.95,z:-.45,c:BRICK_PALETTE.red,sx:2,sz:2},
+ {x:-.2,y:1.95,z:-.45,c:BRICK_PALETTE.yellow,sx:2,sz:2},
+ {x:.9,y:1.95,z:-.45,c:BRICK_PALETTE.blue,sx:2,sz:2},
+ {x:-.75,y:2.6,z:-.45,c:BRICK_PALETTE.yellow,sx:2,sz:2},
+ {x:.35,y:2.6,z:-.45,c:BRICK_PALETTE.red,sx:2,sz:2},
+ {x:-.2,y:3.25,z:-.45,c:BRICK_PALETTE.blue,sx:2,sz:2}
+];
+targetBricks.forEach((s,i)=>{const b=brick(table,s.x,s.y+3.3,s.z,s.c,s.sx,s.sz,.65);buildParts.push({mesh:b,target:s.y,delay:.75+i*.38,fromX:s.x+(i%2?2.8:-2.8)});});
+const loose=[];
+for(let i=0;i<7;i++){const b=brick(table,-2.7+i*.9,2.05,.95,[BRICK_PALETTE.red,BRICK_PALETTE.yellow,BRICK_PALETTE.blue][i%3],2,2,.48);loose.push({mesh:b,baseX:b.position.x,phase:i*.9});}
+
+// A builder minifigure-like pair of hands and torso at the workbench.
+const builder=new THREE.Group();builder.position.set(2.15,1.8,.85);table.add(builder);
+const torso=box(builder,.72,.82,.42,red,0,.45,0);
+const head=new THREE.Mesh(new THREE.CylinderGeometry(.33,.33,.55,24),yellow);head.position.set(0,1.18,0);head.castShadow=true;builder.add(head);
+const hair=new THREE.Mesh(new THREE.SphereGeometry(.35,16,12,0,Math.PI*2,0,Math.PI/2),black);hair.position.set(0,1.45,0);builder.add(hair);
+const arms=[];
+for(const side of [-1,1]){const arm=cylinder(builder,.13,.15,.85,yellow,side*.52,.56,.03,16);arm.rotation.z=side*.6;const hand=new THREE.Mesh(new THREE.SphereGeometry(.18,16,12),yellow);hand.position.set(side*.78,.25,.32);builder.add(hand);arms.push({arm,hand,side});}
+
+// Production credential hanging from a lanyard.
+const badge=new THREE.Group();badge.position.set(-2.4,3.5,1.2);badge.rotation.z=-.13;scene.add(badge);
+const strap=cylinder(badge,.055,.055,1.5,red,0,.85,0,12);
+const card=box(badge,.95,1.25,.1,yellow,0,-.15,0);
+const cardFace=box(badge,.72,.78,.025,red,0,-.12,.07);
+for(let i=0;i<3;i++)box(badge,.52,.045,.03,white,0,-.38-i*.13,.09);
+const clip=cylinder(badge,.09,.09,.12,metal,0,.56,0,16);clip.rotation.x=Math.PI/2;
+
+// Small clapper slate on the bench.
+const slate=new THREE.Group();slate.position.set(-2.1,1.95,-.7);slate.rotation.y=.18;table.add(slate);
+box(slate,1.2,.85,.12,black,0,.42,0);
+for(let i=0;i<4;i++){const stripe=box(slate,.22,.12,.14,white,-.43+i*.29,.91,0);stripe.rotation.z=-.4;}
+
+// Floating brick accents for depth.
+const floaters=[];
+for(let i=0;i<8;i++){const b=brick(scene,-4.2+(i%4)*2.8,3.8+Math.floor(i/4)*2.2,-3.8-(i%3),[BRICK_PALETTE.red,BRICK_PALETTE.yellow,BRICK_PALETTE.blue][i%3],2,2,.45);floaters.push({mesh:b,baseY:b.position.y,phase:i*.7});}
+
+const titles=[
+ ["BASTIDORES DA IMAGINAÇÃO","CADA DETALHE COMEÇA COM UMA IDEIA"],
+ ["LUZES, CÂMERA... CRIATIVIDADE!","CONSTRUA · EXPERIMENTE · DESCUBRA"],
+ ["A CENA TAMBÉM É SUA","ENTRE NA HISTÓRIA E FAÇA ACONTECER"]
+];
+const ease=t=>{const v=Math.max(0,Math.min(1,t));return v*v*(3-2*v);};
+function renderAt(t){
+ const p=t/duration;
+ camera.position.set(-.35+1.15*p,5.15-.35*p,14-2.4*p);
+ camera.lookAt(.1+1.0*p,2.15,-.35);
+ dolly.position.x=-3.2+1.2*ease((t-1.1)/2.1);dolly.rotation.y=-.08+Math.sin(t*.55)*.035;
+ cameraWheels.forEach((w,i)=>w.rotation.y=t*1.4*(i?1:-1));
+ builder.rotation.y=Math.sin(t*1.4)*.08;
+ arms.forEach(a=>{a.arm.rotation.z=a.side*(.6+.15*Math.sin(t*3));a.hand.position.y=.25+.1*Math.sin(t*3+a.side);});
+ buildParts.forEach(o=>{const q=ease((t-o.delay)/.42);o.mesh.position.set(o.fromX+(o.mesh.position.x-o.fromX)*q,o.target+3.3*(1-q),o.mesh.position.z);o.mesh.rotation.y=(1-q)*.45;});
+ loose.forEach((o,i)=>{o.mesh.position.x=o.baseX+Math.sin(t*2+i)*.08;});
+ floaters.forEach(o=>{o.mesh.position.y=o.baseY+Math.sin(t*1.1+o.phase)*.15;o.mesh.rotation.y=Math.sin(t*.5+o.phase)*.18;});
+ lamps.forEach(o=>{o.g.rotation.z=Math.sin(t*.65+o.phase)*.035;o.light.intensity=(o.light.intensity>150?170:115)*(0.96+.04*Math.sin(t*5+o.phase));});
+ const index=t<2.25?0:t<4.65?1:2;const local=index===0?t:index===1?t-2.25:t-4.65;
+ const alpha=ease(Math.min(1,local/.2))*ease(Math.min(1,(index===2?7-t:((index+1)*2.3-t))/.18));
+ caption.textContent=titles[index][0];sub.textContent=titles[index][1];
+ caption.style.opacity=String(alpha);caption.style.transform="translateY("+((1-alpha)*12)+"px)";sub.style.opacity=String(alpha*.9);
+ renderer.render(scene,camera);
+}
+window.__renderFrame=frame=>{paused=true;elapsed=Math.max(0,Math.min(209,frame))/30;renderAt(elapsed);};
+function loop(now){if(!paused){const dt=Math.min(.05,(now-last)/1000);elapsed=(elapsed+dt)%duration;}last=now;renderAt(elapsed);requestAnimationFrame(loop);}
+if(frameParam!==null){renderAt(elapsed);document.querySelector("#controls").style.display="none";}else requestAnimationFrame(loop);
+function toggle(){paused=!paused;document.querySelector("#play").textContent=paused?"Reproduzir":"Pausar";last=performance.now();}
+document.querySelector("#play").addEventListener("click",toggle);
+addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();toggle();}});
+addEventListener("resize",()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);renderAt(elapsed);});
+</script></body></html>
