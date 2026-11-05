@@ -91,3 +91,7 @@ Consulte [`scripts/README.md`](scripts/README.md) para instalação, visualizaç
 
 ## Segmento 02 — universos cinematográficos
 A sequência de 7 segundos está em [`src/scenes/universes-preview.html`](src/scenes/universes-preview.html), com especificação em [`src/scenes/universes-02.md`](src/scenes/universes-02.md). Para exportar, use `npm run render:universes` conforme o guia em [`scripts/README.md`](scripts/README.md). A cena é uma interpretação procedural de gêneros/universos, não uma reprodução de sets ou personagens oficiais.
+
+
+## Segmento 03 — bastidores da imaginação
+A cena de estúdio está em [`src/scenes/production-studio-preview.html`](src/scenes/production-studio-preview.html), com especificação em [`src/scenes/production-studio-03.md`](src/scenes/production-studio-03.md). Inclui câmera de cinema, refletores, bancada de montagem, credencial e tijolos animados. Render local: `npm run render:production-studio`.
