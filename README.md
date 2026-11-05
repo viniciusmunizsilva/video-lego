@@ -87,3 +87,7 @@ O exportador local está em `scripts/render-opening.mjs`. O render final depende
 
 ## Como executar e renderizar
 Consulte [`scripts/README.md`](scripts/README.md) para instalação, visualização local, renderização de segmentos, solução de problemas e checklist de validação. A montagem integral de 30 segundos permanece uma etapa posterior.
+
+
+## Segmento 02 — universos cinematográficos
+A sequência de 7 segundos está em [`src/scenes/universes-preview.html`](src/scenes/universes-preview.html), com especificação em [`src/scenes/universes-02.md`](src/scenes/universes-02.md). Para exportar, use `npm run render:universes` conforme o guia em [`scripts/README.md`](scripts/README.md). A cena é uma interpretação procedural de gêneros/universos, não uma reprodução de sets ou personagens oficiais.
