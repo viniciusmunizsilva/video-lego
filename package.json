@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "render:opening": "node scripts/render-opening.mjs",
     "render:universes": "node scripts/render-universes.mjs",
-    "render:production-studio": "node scripts/render-production-studio.mjs"
+    "render:production-studio": "node scripts/render-production-studio.mjs",
+    "render:generations": "node scripts/render-generations.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"
