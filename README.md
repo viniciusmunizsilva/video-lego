@@ -1,4 +1,4 @@
-> **Briefing atualizado em 05/11/2026:** o roteiro anterior de 30 segundos foi substituído pelo briefing original de seis cenas e 50–60 segundos. Consulte [docs/briefing-original.md](docs/briefing-original.md) e leia as instruções prioritárias no [CLAUDE.md](CLAUDE.md). A estrutura técnica antiga ainda precisa ser adaptada; não considere o vídeo anterior como versão final aprovada.
+ > **Briefing atualizado em 05/11/2026:** a duração correta é 30 segundos exatos. O briefing original foi mantido em conteúdo e estrutura de seis cenas; somente a duração de 50–60s foi corrigida. Consulte [docs/briefing-original.md](docs/briefing-original.md) e [CLAUDE.md](CLAUDE.md). Consulte [docs/briefing-original.md](docs/briefing-original.md) e leia as instruções prioritárias no [CLAUDE.md](CLAUDE.md). A estrutura técnica antiga ainda precisa ser adaptada; não considere o vídeo anterior como versão final aprovada.
 
 # LEGO — CENA EM CENA
 
