@@ -5,6 +5,20 @@
 ## Fonte obrigatória
 Leia integralmente [docs/briefing-original.md](docs/briefing-original.md). Ele é a versão operacional corrigida do briefing recebido. Em caso de conflito, esta versão corrigida prevalece sobre o DOCX quanto à duração e sobre os documentos antigos do repositório quanto à estrutura de produção.
 
+## REFERÊNCIAS VISUAIS CONFIRMADAS PELO USUÁRIO — 05/11/2026
+
+O usuário confirmou que este material é um protótipo/estudo privado e não será divulgado. Para esta versão interna, pode trabalhar com representações LEGO reconhecíveis e próximas das referências abaixo, sem descaracterizá-las em personagens genéricos:
+
+1. Fantasia — Harry Potter.
+2. Ficção científica — Star Wars.
+3. Super-heróis — Marvel.
+4. Ação e veículos — franquias automobilísticas.
+5. Nostalgia — De Volta para o Futuro.
+
+Crie minifiguras, figurinos, silhuetas, acessórios, veículos e cenários claramente associados a essas referências, com acabamento LEGO premium e qualidade equivalente ao piloto aprovado. Não misture universos sem intenção. O briefing não identifica qual franquia automobilística específica usar; escolha uma opção visualmente forte e documente no storyboard ou pergunte ao usuário se a escolha for determinante.
+
+**Limite de escopo:** esta orientação vale para o protótipo privado solicitado. Não interprete isso como autorização para publicar, distribuir, vender ou usar comercialmente assets protegidos. Se o projeto passar a ser divulgado, será necessária uma revisão específica de direitos e licenças.
+
 ## Escopo fechado
 - **Duração: 30,00 segundos exatos.**
 - Vertical 9:16, alvo 1080×1920, 30 fps (900 frames).
