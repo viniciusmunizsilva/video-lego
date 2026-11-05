@@ -19,3 +19,7 @@ The preview runs automatically. It is a visual prototype, not a final 1080×1920
 - The cone is a simple transparent beam approximation; production volumetrics can be improved with shader/fog passes.
 - No clapperboard has been animated in this preview yet.
 - The browser preview requires network access to load Three.js from jsDelivr.
+
+
+## Estado de conclusão
+A composição e a timeline da abertura foram implementadas. A cena inclui a claquete animada e a transição final. A renderização MP4 e a validação em navegador continuam pendentes de execução local; não marcar como render final até revisar o resultado.
