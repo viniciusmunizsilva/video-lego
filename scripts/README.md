@@ -55,3 +55,7 @@ Antes de aprovar qualquer MP4:
 4. Conferir textos, marcas, anatomia dos modelos e consistência de escala.
 5. Ouvir áudio e verificar sincronismo de claquete, impactos e transições.
 6. Só marcar como aprovado depois de revisão visual e sonora humana.
+
+
+## Renderização determinística
+Os scripts mantêm uma única página Chromium aberta e solicitam cada quadro por índice, em vez de depender do tempo real de reprodução. Isso reduz variação entre quadros e acelera a captura. A sequência dos universos usa 210 quadros (7 segundos × 30 fps).
