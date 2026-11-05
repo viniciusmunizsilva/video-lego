@@ -8,7 +8,8 @@
     "render:opening": "node scripts/render-opening.mjs",
     "render:universes": "node scripts/render-universes.mjs",
     "render:production-studio": "node scripts/render-production-studio.mjs",
-    "render:generations": "node scripts/render-generations.mjs"
+    "render:generations": "node scripts/render-generations.mjs",
+    "render:finale": "node scripts/render-finale.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"
