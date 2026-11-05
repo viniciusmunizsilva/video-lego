@@ -31,3 +31,15 @@ Conteúdo do pacote:
 - `studio-background-vertical-alt.png` — 941 × 1672, RGB, sem alfa.
 
 A presença de canal alfa foi verificada tecnicamente com Pillow. Os fundos são imagens compostas e ainda precisam ser tratados como plates de referência, não como camadas 3D independentes.
+
+
+## Asset 04 — peça procedural Three.js (2026-11-05)
+
+- Código: `src/three/createBrick.js`.
+- Estado: implementado e versionado.
+- Tipo: geometria procedural Three.js, não raster.
+- Inclui corpo com cantos arredondados e studs individuais como meshes separados.
+- Cores base: vermelho, amarelo, azul, preto e branco quente.
+- Vantagem: controle consistente de escala, rotação, iluminação, animação e render com fundo transparente.
+- A geometria é LEGO-inspired para o projeto acadêmico; não é um modelo CAD oficial.
+- Próxima tarefa: criar uma cena de preview/render vertical com alpha e exportar PNGs individuais por cor/tamanho.
