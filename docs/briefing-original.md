@@ -8,6 +8,26 @@
 ## Objetivo e proposta do evento
 LEGO — CENA EM CENA é um festival de dois dias sobre cinema, nostalgia, construção e cenografia. O público não será apenas espectador: poderá entrar em sets inspirados em gêneros e universos cinematográficos, explorar cenários, reconstruir cenas e criar. Crianças e adultos têm jornadas e atividades próprias. O espaço é transformado em um estúdio cinematográfico LEGO; visitantes recebem credencial de produção. O momento final fotografa construções dos participantes e as projeta como créditos cinematográficos. Há atividades e galeria, experiências premium e loja com produtos relacionados aos universos apresentados.
 
+## Referências de universos e personagens — orientação adicional do usuário (05/11/2026)
+
+O usuário definiu as referências visuais que devem orientar os cinco takes da montagem de universos:
+
+1. **Fantasia:** Harry Potter.
+2. **Ficção científica:** Star Wars.
+3. **Super-heróis:** Marvel.
+4. **Ação e veículos:** franquias automobilísticas.
+5. **Nostalgia:** De Volta para o Futuro.
+
+O usuário esclareceu que o material é um estudo/protótipo privado, não será divulgado nem publicado. Portanto, para esta versão interna, o objetivo é produzir representações LEGO claramente reconhecíveis e próximas das referências escolhidas, com qualidade visual superior ao piloto inicial. Não é necessário descaracterizar os universos em personagens totalmente genéricos para esta finalidade privada.
+
+Orientações de execução:
+- Criar minifiguras LEGO inspiradas de maneira reconhecível nos personagens centrais de cada referência, com roupas, silhuetas, acessórios e cores característicos.
+- Recriar veículos e cenários icônicos em escala LEGO quando forem úteis para reconhecimento visual.
+- Manter o acabamento premium do piloto: geometria refinada, plástico ABS, studs, iluminação cinematográfica, sombras de contato, reflexos e câmera bem composta.
+- Não misturar universos no mesmo cenário sem intenção.
+- Para ação e veículos, o briefing não especifica uma franquia automobilística exata. Escolher uma referência visual coerente e sinalizar a escolha no storyboard; se uma franquia específica for indispensável, perguntar ao usuário.
+- Esta autorização contextual é para o protótipo privado. Não presumir autorização para publicidade, distribuição pública, venda ou uso comercial. Se o objetivo mudar para publicação, solicitar validação de direitos/licenças antes de preparar a versão pública.
+
 ## Requisitos de formato e linguagem
 - Vídeo vertical 9:16 para Instagram Reels.
 - Duração final obrigatória: **30 segundos exatos**. Esta é a única correção feita ao briefing original, por orientação adicional do usuário.
