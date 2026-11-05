@@ -1,24 +1,57 @@
-# Render local da abertura
+# Execução e renderização local
 
 ## Requisitos
-- Node.js 20+
-- FFmpeg instalado e disponível no PATH
-- Dependências instaladas com `npm install`
-- Chromium do Playwright instalado com `npx playwright install chromium`
+- Node.js 20 ou superior.
+- FFmpeg instalado e disponível no PATH.
+- Dependências npm do projeto.
+- Chromium do Playwright.
 
-## Passos
-1. Em um terminal, execute `npm run dev`.
-2. Em outro terminal, execute `npm run render:opening`.
-3. O MP4 será criado em `renders/opening-01.mp4`.
+## Primeira configuração
+Na raiz do repositório:
 
-Para usar outro endereço do servidor: `BASE_URL=http://localhost:4173 npm run render:opening`.
+```bash
+npm install
+npx playwright install chromium
+```
 
-## Especificação
-- 1080 × 1920
-- 9:16
-- 30 fps
-- 120 quadros / 4 segundos
-- H.264, yuv420p, faststart
-- Sem áudio nesta etapa. Os cues de áudio estão em `src/scenes/opening-finalization.md`.
+## Visualizar uma cena
+Inicie o servidor de desenvolvimento:
 
-O script captura cada quadro usando `?frame=N`, de forma que a animação não dependa da taxa de atualização ou do tempo de carregamento do navegador.
+```bash
+npm run dev
+```
+
+Abra no navegador:
+- Abertura: `http://localhost:5173/src/scenes/opening-preview.html`
+- Universos: `http://localhost:5173/src/scenes/universes-preview.html`
+
+Para pausar em um quadro específico, acrescente `?frame=NN`. Abertura: 0–119. Universos: 0–209.
+
+## Renderizar MP4
+Com o servidor Vite em execução, abra outro terminal:
+
+```bash
+npm run render:opening
+npm run render:universes
+```
+
+Os arquivos serão gerados em `renders/opening-01.mp4` e `renders/universes-02.mp4`.
+
+## Renderizar o vídeo completo
+As cenas acima são segmentos independentes. A montagem final de 30 segundos ainda precisa combinar os segmentos, cenas de participação e gerações, trilha, locução, efeitos e tela final. Não tratar segmentos individuais como vídeo final.
+
+## Solução de problemas
+- `ffmpeg: command not found`: instale FFmpeg e reinicie o terminal.
+- Chromium ausente: execute `npx playwright install chromium`.
+- Falha ao carregar Three.js: confirme conexão com internet (a prévia importa Three.js do jsDelivr).
+- Página em branco: mantenha `npm run dev` ativo e acesse pelo endereço local, não abrindo o HTML diretamente como `file://`.
+- Render com erro de WebGL: atualize driver gráfico/Chromium; em ambiente sem GPU, tente `npx playwright install --with-deps chromium` e habilite SwiftShader nas opções do Chromium.
+
+## Checklist obrigatório de validação
+Antes de aprovar qualquer MP4:
+1. Reproduzir o vídeo inteiro, não apenas conferir um frame.
+2. Conferir enquadramento 9:16 e resolução 1080 × 1920.
+3. Conferir 30 fps, duração, cortes e ausência de quadros pretos involuntários.
+4. Conferir textos, marcas, anatomia dos modelos e consistência de escala.
+5. Ouvir áudio e verificar sincronismo de claquete, impactos e transições.
+6. Só marcar como aprovado depois de revisão visual e sonora humana.
