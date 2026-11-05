@@ -70,7 +70,7 @@ function makeGalaxy(z){
  const nose=new THREE.Mesh(new THREE.ConeGeometry(.48,1.6,4),cream);nose.rotation.z=-Math.PI/2;nose.position.x=1.8;ship.add(nose);
  for(const x of [-.85,.85]){addBox(ship,.42,.18,2.3,blueMat,x,-.12,0);}
  const engine=new THREE.PointLight("#6cbfff",35,7);engine.position.set(-1.4,.2,0);ship.add(engine);
- for(let i=0;i<18;i++){const star=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),new THREE.MeshBasicMaterial({color:"#dce8ff"}));star.position.set((Math.random()-.5)*9,1+Math.random()*6,-2-Math.random()*2);g.add(star);}
+ for(let i=0;i<18;i++){const star=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),new THREE.MeshBasicMaterial({color:"#dce8ff"}));star.position.set(Math.sin(i*12.989)*4.5,1+((i*7)%13)/2,-2-((i*5)%7)*.28);g.add(star);}
  return g;
 }
 function makeHeroCity(z){
@@ -137,7 +137,7 @@ const labels=[
 ];
 const dinoRefs=[];
 for(let i=0;i<7;i++){const z=-i*7.8;const result=makers[i](z);if(i===3)dinoRefs.push(result.dino);sets.push({z,group:result.g||result,index:i});}
-const flash=new THREE.Mesh(new THREE.PlaneGeometry(20,30),new THREE.MeshBasicMaterial({color:"#fff",transparent:true,opacity:0,depthWrite:false}));flash.position.set(0,0,2);camera.add(flash);scene.add(camera);
+const flash=new THREE.Mesh(new THREE.PlaneGeometry(20,30),new THREE.MeshBasicMaterial({color:"#fff",transparent:true,opacity:0,depthWrite:false}));flash.position.set(0,0,-1);camera.add(flash);scene.add(camera);
 function smooth(t){return t*t*(3-2*t);}
 function renderAt(t){
  const p=Math.max(0,Math.min(1,t/duration));
@@ -155,6 +155,7 @@ function renderAt(t){
  sets.forEach((s,i)=>{s.group.rotation.y=Math.sin(t*.6+i)*.025;});
  renderer.render(scene,camera);
 }
+window.__renderFrame=(frame)=>{paused=true;elapsed=Math.max(0,Math.min(209,frame))/30;renderAt(elapsed);};
 function loop(now){if(!paused){const dt=Math.min(.05,(now-last)/1000);elapsed=(elapsed+dt)%duration;}last=now;renderAt(elapsed);requestAnimationFrame(loop);}
 if(frameParam!==null){renderAt(elapsed);document.querySelector("#controls").style.display="none";}else requestAnimationFrame(loop);
 function toggle(){paused=!paused;document.querySelector("#play").textContent=paused?"Reproduzir":"Pausar";last=performance.now();}
