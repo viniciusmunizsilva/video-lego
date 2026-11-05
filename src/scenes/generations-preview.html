@@ -46,7 +46,7 @@ const specs=[
  [-.2,1.24,0,BRICK_PALETTE.yellow],[-1.2,1.24,0,BRICK_PALETTE.red],[.8,1.24,0,BRICK_PALETTE.blue]
 ];
 specs.forEach((s,i)=>{const b=createBrick({color:s[3],studsX:2,studsZ:2});b.position.set(s[0],s[1]+2.8,s[2]);b.scale.setScalar(.72);build.add(b);bricks.push({mesh:b,targetY:s[1],targetX:s[0],targetZ:s[2],delay:.35+i*.27,startX:s[0]+(i%2?2.2:-2.2)});});
-const roof=box(build,3.1,.22,1.3,new THREE.MeshStandardMaterial({color:"#c68a32",roughness:.35}),-.2,2.15,0);roof.position.y=4.95;
+const roof=box(build,3.1,.22,1.3,new THREE.MeshStandardMaterial({color:"#c68a32",roughness:.35}),-.2,2.15,0);roof.position.y=1.85;
 const doorway=box(build,.65,1.05,.12,dark,-.2,.52,.67);
 // Minifigure family: original toy-like forms, differentiated by scale and clothes.
 function minifig(parent,scale,shirt,pants,hairColor,x,z){
