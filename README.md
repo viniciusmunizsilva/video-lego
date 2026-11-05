@@ -99,3 +99,7 @@ A cena de estúdio está em [`src/scenes/production-studio-preview.html`](src/sc
 
 ## Segmento 04 — todas as gerações
 A cena de construção intergeracional está em [`src/scenes/generations-preview.html`](src/scenes/generations-preview.html), com direção visual em [`src/scenes/generations-04.md`](src/scenes/generations-04.md). Exportação: `npm run render:generations`.
+
+
+## Segmento 05 — grande revelação
+A cena final está em [`src/scenes/finale-preview.html`](src/scenes/finale-preview.html), com especificação em [`src/scenes/finale-05.md`](src/scenes/finale-05.md). Tijolos 3D convergem para formar o título CENA / EM / CENA, seguidos da placa de assinatura LEGO e da frase de campanha. Exportação: `npm run render:finale`. A renderização e a validação visual ainda estão pendentes.
