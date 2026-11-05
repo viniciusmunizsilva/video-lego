@@ -1,0 +1,17 @@
+{
+  "name": "lego-cena-em-cena",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "render:opening": "node scripts/render-opening.mjs"
+  },
+  "dependencies": {
+    "three": "^0.166.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.1",
+    "vite": "^6.0.5"
+  }
+}
