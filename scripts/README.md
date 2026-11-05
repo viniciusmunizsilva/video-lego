@@ -24,8 +24,9 @@ npm run dev
 Abra no navegador:
 - Abertura: `http://localhost:5173/src/scenes/opening-preview.html`
 - Universos: `http://localhost:5173/src/scenes/universes-preview.html`
+- Bastidores: `http://localhost:5173/src/scenes/production-studio-preview.html`
 
-Para pausar em um quadro específico, acrescente `?frame=NN`. Abertura: 0–119. Universos: 0–209.
+Para pausar em um quadro específico, acrescente `?frame=NN`. Abertura: 0–119. Universos: 0–209. Bastidores: 0–209.
 
 ## Renderizar MP4
 Com o servidor Vite em execução, abra outro terminal:
@@ -33,9 +34,10 @@ Com o servidor Vite em execução, abra outro terminal:
 ```bash
 npm run render:opening
 npm run render:universes
+npm run render:production-studio
 ```
 
-Os arquivos serão gerados em `renders/opening-01.mp4` e `renders/universes-02.mp4`.
+Os arquivos serão gerados em `renders/opening-01.mp4` e `renders/universes-02.mp4` e `renders/production-studio-03.mp4`.
 
 ## Renderizar o vídeo completo
 As cenas acima são segmentos independentes. A montagem final de 30 segundos ainda precisa combinar os segmentos, cenas de participação e gerações, trilha, locução, efeitos e tela final. Não tratar segmentos individuais como vídeo final.
