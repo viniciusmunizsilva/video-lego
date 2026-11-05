@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { spawn } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
@@ -22,5 +22,7 @@ for (let frame = 0; frame < frames; frame++) {
   if (frame % 30 === 0) console.log(`Captured ${frame}/${frames}`);
 }
 await browser.close();
-const ffmpeg = spawn("ffmpeg", ["-y", "-framerate", String(fps), "-i", resolve(frameDir, "frame-%04d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-movflags", "+faststart", output], { stdio: "inherit" });
-ffmpeg.on("exit", code => { if (code !== 0) process.exitCode = code ?? 1; else console.log(`Rendered ${output}`); });
+const ffmpeg = spawnSync("ffmpeg", ["-y", "-framerate", String(fps), "-i", resolve(frameDir, "frame-%04d.png"), "-frames:v", String(frames), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-movflags", "+faststart", "-vf", `scale=${width}:${height}:flags=lanczos`, output], { stdio: "inherit" });
+if (ffmpeg.error) throw ffmpeg.error;
+if (ffmpeg.status !== 0) process.exit(ffmpeg.status ?? 1);
+console.log(`Rendered ${output}`);
