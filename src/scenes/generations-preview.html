@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CENA EM CENA — Todas as gerações</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090c13}
+body{display:grid;place-items:center;font-family:Inter,system-ui,sans-serif}
+#stage{height:100dvh;aspect-ratio:9/16;max-width:100vw;position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+#eyebrow{position:absolute;top:20px;left:20px;color:#eee6d9;font-size:9px;letter-spacing:.22em;opacity:.58}
+#headline{position:absolute;left:22px;right:22px;bottom:70px;color:#fff;font-weight:850;font-size:clamp(27px,6vw,42px);line-height:1.02;letter-spacing:.015em;text-shadow:0 3px 20px #000;opacity:0}
+#sub{position:absolute;left:24px;bottom:35px;color:#f3b34e;font-size:9px;letter-spacing:.2em;opacity:0}
+#controls{position:fixed;right:12px;bottom:12px;display:flex;gap:8px;align-items:center;color:#ddd;font:12px system-ui}
+#controls button{background:#202938;border:1px solid #526078;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+@media(max-aspect-ratio:9/16){#stage{width:100vw;height:auto}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js"}}</script>
+</head><body><main id="stage"><div id="eyebrow">CENA EM CENA · TODAS AS GERAÇÕES</div><div id="headline"></div><div id="sub"></div></main><div id="controls"><button id="play">Pausar</button><span>SPACE · play/pause</span></div>
+<script type="module">
+import * as THREE from "three";
+import {createBrick,BRICK_PALETTE} from "../three/createBrick.js";
+const stage=document.querySelector("#stage"),headline=document.querySelector("#headline"),sub=document.querySelector("#sub");
+const params=new URLSearchParams(location.search),frameParam=params.has("frame")?Math.max(0,Math.min(149,Number(params.get("frame")))):null;
+const duration=5;let paused=frameParam!==null,elapsed=frameParam===null?0:frameParam/30,last=performance.now();
+const scene=new THREE.Scene();scene.background=new THREE.Color("#0b0d13");scene.fog=new THREE.FogExp2("#0b0d13",.022);
+const camera=new THREE.PerspectiveCamera(34,9/16,.1,80);camera.position.set(0,5.4,13);camera.lookAt(0,2,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;stage.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight("#e4d7c2","#18121a",1.25));
+const key=new THREE.SpotLight("#ffc16e",250,35,Math.PI/4,.55,1);key.position.set(-4,10,6);key.target.position.set(0,1,0);key.castShadow=true;scene.add(key,key.target);
+const rim=new THREE.PointLight("#477dc4",38,22,2);rim.position.set(4,5,-3);scene.add(rim);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(35,35),new THREE.MeshPhysicalMaterial({color:"#151a23",roughness:.25,metalness:.24,clearcoat:.75}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(20,12),new THREE.MeshStandardMaterial({color:"#151923",roughness:.9}));wall.position.set(0,5,-6);scene.add(wall);
+const table=new THREE.Group();table.position.set(0,0,-.4);scene.add(table);
+const wood=new THREE.MeshStandardMaterial({color:"#493323",roughness:.65});
+const dark=new THREE.MeshStandardMaterial({color:"#202632",roughness:.4,metalness:.15});
+function box(parent,w,h,d,mat,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function cyl(parent,r1,r2,h,mat,x,y,z,n=24){const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,n),mat);m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m;}
+box(table,8,.38,4.3,wood,0,1.55,0);
+for(const x of [-3.5,3.5])for(const z of [-1.7,1.7])box(table,.22,1.55,.22,dark,x,.76,z);
+box(table,5.1,.16,2.6,new THREE.MeshStandardMaterial({color:"#17263a",roughness:.35}),0,1.82,0);
+// Shared build: a colorful little house/fortress with a doorway and roof.
+const build=new THREE.Group();build.position.set(0,1.93,-.15);table.add(build);
+const bricks=[];
+const specs=[
+ [-1.2,0,0,BRICK_PALETTE.red],[-.2,0,0,BRICK_PALETTE.yellow],[.8,0,0,BRICK_PALETTE.blue],
+ [-1.2,.62,0,BRICK_PALETTE.blue],[.8,.62,0,BRICK_PALETTE.red],
+ [-.2,1.24,0,BRICK_PALETTE.yellow],[-1.2,1.24,0,BRICK_PALETTE.red],[.8,1.24,0,BRICK_PALETTE.blue]
+];
+specs.forEach((s,i)=>{const b=createBrick({color:s[3],studsX:2,studsZ:2});b.position.set(s[0],s[1]+2.8,s[2]);b.scale.setScalar(.72);build.add(b);bricks.push({mesh:b,targetY:s[1],delay:.35+i*.27,startX:s[0]+(i%2?2.2:-2.2)});});
+const roof=box(build,3.1,.22,1.3,new THREE.MeshStandardMaterial({color:"#c68a32",roughness:.35}),-.2,2.15,0);roof.position.y=4.95;
+const doorway=box(build,.65,1.05,.12,dark,-.2,.52,.67);
+// Minifigure family: original toy-like forms, differentiated by scale and clothes.
+function minifig(parent,scale,shirt,pants,hairColor,x,z){
+ const g=new THREE.Group();g.position.set(x,1.76,z);g.scale.setScalar(scale);parent.add(g);
+ const shirtMat=new THREE.MeshPhysicalMaterial({color:shirt,roughness:.3,clearcoat:.5});
+ const pantsMat=new THREE.MeshStandardMaterial({color:pants,roughness:.55});
+ const skin=new THREE.MeshStandardMaterial({color:"#e5b77e",roughness:.48});
+ const hair=new THREE.MeshStandardMaterial({color:hairColor,roughness:.75});
+ // legs and torso
+ box(g,.42,.65,.34,pantsMat,-.22,.34,0);box(g,.42,.65,.34,pantsMat,.22,.34,0);
+ box(g,.88,.82,.42,shirtMat,0,1.05,0);
+ const head=cyl(g,.34,.34,.55,skin,0,1.77,0,24);
+ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.37,20,14,0,Math.PI*2,0,Math.PI/2),hair);hairCap.position.set(0,2.08,0);g.add(hairCap);
+ // simple friendly face, dots and smile
+ const eyeMat=new THREE.MeshBasicMaterial({color:"#29221d"});
+ for(const xEye of [-.12,.12]){const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),eyeMat);eye.position.set(xEye,1.82,.315);g.add(eye);}
+ const smile=new THREE.Mesh(new THREE.TorusGeometry(.09,.018,6,16,Math.PI),new THREE.MeshBasicMaterial({color:"#7a3d2c"}));smile.position.set(0,1.69,.32);smile.rotation.z=Math.PI;g.add(smile);
+ const arms=[];
+ for(const side of [-1,1]){
+  const arm=cyl(g,.14,.16,.75,skin,side*.53,1.04,.03,16);arm.rotation.z=side*.2;
+  const hand=new THREE.Mesh(new THREE.SphereGeometry(.17,14,10),skin);hand.position.set(side*.65,.72,.24);g.add(hand);arms.push({arm,hand,side});
+ }
+ return {group:g,arms};
+}
+const adult=minifig(scene,1.12,"#285b91","#283142","#4b3022",-2.35,.8);
+const child=minifig(scene,.78,"#d54a32","#344d68","#51351f",2.25,.95);
+adult.group.rotation.y=.35;child.group.rotation.y=-.42;
+// Hands reach toward the shared build.
+const looseBricks=[];
+for(let i=0;i<5;i++){const b=createBrick({color:[BRICK_PALETTE.red,BRICK_PALETTE.yellow,BRICK_PALETTE.blue][i%3],studsX:2,studsZ:2});b.position.set(-2+i*.95,1.95,1.15);b.scale.setScalar(.46);table.add(b);looseBricks.push({mesh:b,x:b.position.x,phase:i*.8});}
+// Warm practical bulbs in the back create a cozy cinematic bokeh impression.
+for(let i=0;i<5;i++){const bulb=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),new THREE.MeshBasicMaterial({color:i%2?"#ffc16e":"#8eb7e8"}));bulb.position.set(-5+i*2.5,5.5,-5.5);scene.add(bulb);}
+const ease=t=>{const v=Math.max(0,Math.min(1,t));return v*v*(3-2*v);};
+function renderAt(t){
+ const p=t/duration;
+ camera.position.set(-.25+.45*p,5.4-.55*p,13-1.45*p);camera.lookAt(0,2.1,-.15);
+ adult.group.rotation.y=.35+Math.sin(t*1.2)*.04;child.group.rotation.y=-.42+Math.sin(t*1.35+.6)*.06;
+ adult.arms.forEach(a=>{a.arm.rotation.z=a.side*(.2+.12*Math.sin(t*2.1));a.hand.position.y=.72+.08*Math.sin(t*2.1+a.side);});
+ child.arms.forEach(a=>{a.arm.rotation.z=a.side*(.2+.18*Math.sin(t*2.4+1));a.hand.position.y=.72+.1*Math.sin(t*2.4+a.side);});
+ bricks.forEach(o=>{const q=ease((t-o.delay)/.42);o.mesh.position.set(o.startX+(o.mesh.position.x-o.startX)*q,o.targetY+2.8*(1-q),o.mesh.position.z);o.mesh.rotation.y=(1-q)*.32;});
+ looseBricks.forEach((o,i)=>{o.mesh.position.x=o.x+Math.sin(t*1.5+o.phase)*.07;});
+ const titles=t<1.65?["A IMAGINAÇÃO NÃO TEM IDADE","UMA PAIXÃO QUE ATRAVESSA GERAÇÕES"]:t<3.45?["CRIAR É MELHOR JUNTOS","CADA PEÇA CONTA UMA HISTÓRIA"]:["MEMÓRIAS QUE SE CONSTROEM","DE GERAÇÃO EM GERAÇÃO"];
+ const idx=t<1.65?0:t<3.45?1:2;const local=idx===0?t:idx===1?t-1.65:t-3.45;
+ const alpha=ease(Math.min(1,local/.18))*ease(Math.min(1,(idx===2?5-t:(idx+1)*1.8-t)/.2));
+ headline.textContent=titles[idx][0];sub.textContent=titles[idx][1];headline.style.opacity=String(alpha);headline.style.transform="translateY("+((1-alpha)*12)+"px)";sub.style.opacity=String(alpha*.9);
+ renderer.render(scene,camera);
+}
+window.__renderFrame=frame=>{paused=true;elapsed=Math.max(0,Math.min(149,frame))/30;renderAt(elapsed);};
+function loop(now){if(!paused){elapsed=(elapsed+Math.min(.05,(now-last)/1000))%duration;}last=now;renderAt(elapsed);requestAnimationFrame(loop);}
+if(frameParam!==null){renderAt(elapsed);document.querySelector("#controls").style.display="none";}else requestAnimationFrame(loop);
+function toggle(){paused=!paused;document.querySelector("#play").textContent=paused?"Reproduzir":"Pausar";last=performance.now();}
+document.querySelector("#play").addEventListener("click",toggle);addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();toggle();}});
+addEventListener("resize",()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);renderAt(elapsed);});
+</script></body></html>
