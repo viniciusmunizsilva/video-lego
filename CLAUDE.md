@@ -245,3 +245,35 @@ O trabalho só está concluído quando:
 6. O relatório de QA descreve evidências reais e limitações.
 
 **Primeira ação ao iniciar:** auditar o estado atual do GitHub Actions e renderizar/inspecionar frames das cinco cenas existentes. Depois corrija os renderizadores, produza os segmentos e monte o filme. Não comece por criar uma sexta cena nem por substituir os protótipos sem justificativa.
+
+
+## 10. Estado de transferência — atualização 05/11/2026
+
+**O projeto está pronto para ser assumido por Claude imediatamente. Não aguarde a conclusão do GitHub Actions para começar.** O objetivo do handoff é justamente que Claude conclua as validações e a montagem.
+
+Verificações de existência feitas no repositório:
+- As cinco páginas de cena existem, incluindo `src/scenes/finale-preview.html`.
+- Os cinco renderizadores existem, incluindo `scripts/render-finale.mjs`.
+- `src/three/createBrick.js` existe e exporta `createBrick` e `BRICK_PALETTE`.
+- `package.json` possui comandos para renderizar os cinco segmentos.
+- `CLAUDE.md` e a documentação de cada cena estão versionados.
+
+**Não verificado ainda:** nenhuma das cinco cenas foi visualmente aprovada nesta revisão, e não há confirmação de que os MP4s tenham sido gerados com sucesso.
+
+### Estado observado da automação
+- O workflow atual `.github/workflows/render-segments.yml` instala Node, Chromium e FFmpeg, inicia Vite e executa os cinco renderizadores.
+- O workflow atual apenas faz upload dos MP4s dos segmentos; ele **não monta o filme completo de 30 segundos**.
+- Nas verificações feitas em 05/11/2026, duas execuções estavam simultaneamente na etapa `Render all five segments`; as etapas anteriores de instalação e inicialização do Vite haviam passado. Isso não prova falha, mas também não prova que a renderização terminará.
+- O commit do próprio handoff acionou outra execução do workflow por causa do gatilho `push`. Evite disparar execuções duplicadas sem necessidade.
+- Os logs completos dos jobs não estavam disponíveis pela integração durante a revisão. Investigue no GitHub Actions diretamente antes de concluir a causa da demora.
+
+### Prioridade para Claude — não bloquear o início
+1. Assumir o projeto agora; não esperar a execução antiga terminar.
+2. Verificar e, se necessário, interromper execuções duplicadas/obsoletas do Actions pela interface do GitHub.
+3. Inspecionar e otimizar os renderizadores. Atenção especial ao `render-opening.mjs`, que navega para a página novamente em cada um dos 120 frames; considere manter uma página aberta e chamar `window.__renderFrame(frame)`, como nos demais renderizadores, se a cena suportar isso.
+4. Fazer um teste curto por cena (por exemplo, frames 0, meio e último) antes de uma renderização integral de 900 frames. Isso identifica bugs sem gastar tempo renderizando tudo repetidamente.
+5. Rodar a renderização integral dos cinco segmentos e inspecionar os resultados.
+6. Implementar a montagem final do filme completo em `renders/lego-cena-em-cena-final.mp4`, com exatamente 900 frames/30 segundos.
+7. Atualizar o GitHub Actions para executar renderização, montagem e validação com ffprobe, e publicar o MP4 final e os segmentos como artifacts.
+
+**Orientação ao usuário:** a transferência para Claude pode acontecer agora. O trabalho de validação e finalização faz parte da tarefa que Claude deve executar, não é pré-requisito para entregar o projeto a ele.
