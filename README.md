@@ -95,3 +95,7 @@ A sequência de 7 segundos está em [`src/scenes/universes-preview.html`](src/sc
 
 ## Segmento 03 — bastidores da imaginação
 A cena de estúdio está em [`src/scenes/production-studio-preview.html`](src/scenes/production-studio-preview.html), com especificação em [`src/scenes/production-studio-03.md`](src/scenes/production-studio-03.md). Inclui câmera de cinema, refletores, bancada de montagem, credencial e tijolos animados. Render local: `npm run render:production-studio`.
+
+
+## Segmento 04 — todas as gerações
+A cena de construção intergeracional está em [`src/scenes/generations-preview.html`](src/scenes/generations-preview.html), com direção visual em [`src/scenes/generations-04.md`](src/scenes/generations-04.md). Exportação: `npm run render:generations`.
