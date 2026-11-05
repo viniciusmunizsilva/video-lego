@@ -10,7 +10,7 @@ LEGO — CENA EM CENA é um festival de dois dias sobre cinema, nostalgia, const
 
 ## Requisitos de formato e linguagem
 - Vídeo vertical 9:16 para Instagram Reels.
-- Duração desejada: aproximadamente 50–60 segundos; roteiro estruturado para 60 segundos.
+- Duração final obrigatória: **30 segundos exatos**. Esta é a única correção feita ao briefing original, por orientação adicional do usuário.
 - Full HD ou superior, maior resolução disponível.
 - Narração em português brasileiro, trilha original/licenciada, efeitos sonoros e legendas para toda a narração.
 - Linguagem de trailer cinematográfico: abertura intrigante, crescimento de ritmo, descoberta e encerramento marcante.
@@ -21,9 +21,11 @@ LEGO — CENA EM CENA é um festival de dois dias sobre cinema, nostalgia, const
 - Consistência de escala, acabamento, temperatura de cor e detalhe em todos os takes.
 - Não gerar textos longos nas imagens. Títulos, datas, local e informações finais são adicionados na edição.
 
-## Roteiro obrigatório — 6 cenas / 60 segundos
+## Roteiro obrigatório — 6 cenas / 30 segundos
 
-### CENA 1 — A SESSÃO VAI COMEÇAR (00:00–00:07)
+Distribuição de tempo adaptada para somar exatamente 30 segundos. Preservar todos os seis momentos narrativos e seus elementos essenciais, usando montagem dinâmica e planos curtos. Os takes da cena 2 podem ser muito breves, mas cada um dos cinco gêneros precisa ser reconhecível.
+
+### CENA 1 — A SESSÃO VAI COMEÇAR (00:00–00:03)
 **Visual:** tela escura; projetor antigo inicia; facho atravessa poeira; câmera avança para sala de cinema em miniatura feita de peças LEGO; claquete física entra no quadro e bate. Plano amplo e aproximação lenta. Atmosfera de estreia. A claquete é objeto do cenário, não texto flutuante.
 
 **Narração:** “Algumas histórias nunca saem da nossa memória...”
@@ -32,7 +34,7 @@ LEGO — CENA EM CENA é um festival de dois dias sobre cinema, nostalgia, const
 
 **Som:** projetor, breve silêncio antes da claquete, trilha crescente.
 
-### CENA 2 — ENTRE NOS UNIVERSOS (00:07–00:21)
+### CENA 2 — ENTRE NOS UNIVERSOS (00:03–00:10)
 **Visual:** montagem dinâmica com cinco takes distintos, todos no mesmo universo LEGO cinematográfico:
 1. fantasia: castelo e magia;
 2. aventura espacial: nave e estrelas;
@@ -47,7 +49,7 @@ Minifiguras aparecem nos cenários. Takes de 2–3 segundos, cada universo visua
 
 **Som:** trilha acelera; efeitos sutis de magia, motor, nave e movimento.
 
-### CENA 3 — VOCÊ FAZ PARTE DA PRODUÇÃO (00:21–00:34)
+### CENA 3 — VOCÊ FAZ PARTE DA PRODUÇÃO (00:10–00:17)
 **Visual:** universos transformam-se em estúdio cinematográfico LEGO. Mostrar câmera de cinema, refletores, claquete, cenários sendo montados e credencial de produção sobre bancada. Mãos entram no quadro para encaixar peças e reconstruir pequena cena. Mostrar criança observando pistas em cenário e adulto apreciando construção detalhada. Alternar planos gerais com closes de mãos, peças e credencial. Credencial física sem texto ilegível gerado; inserir conteúdo correto na pós.
 
 **Narração:** “Mas dessa vez, você não vai apenas assistir. Vai explorar cenários, descobrir detalhes, construir e recriar suas próprias cenas!”
@@ -56,7 +58,7 @@ Minifiguras aparecem nos cenários. Takes de 2–3 segundos, cada universo visua
 
 **Som:** encaixe de peças, cliques de câmera e batida musical sincronizada com as palavras.
 
-### CENA 4 — PARA TODAS AS GERAÇÕES (00:34–00:44)
+### CENA 4 — PARA TODAS AS GERAÇÕES (00:17–00:21)
 **Visual:** montagem paralela de duas jornadas respeitosas e equilibradas. Primeiro, criança explora um set, encontra pista escondida e monta pequena cena. Depois, adulto observa galeria de construções LEGO, analisa detalhes e participa de atividade de construção. Não mostrar criança e adulto obrigatoriamente fazendo a mesma atividade. Adultos são público interessado por si, não apenas acompanhantes.
 
 **Narração:** “Uma experiência para crianças e adultos, cada um vivendo o cinema do seu próprio jeito!”
@@ -65,7 +67,7 @@ Minifiguras aparecem nos cenários. Takes de 2–3 segundos, cada universo visua
 
 **Som:** trilha calorosa e inspiradora, mantendo ritmo de trailer.
 
-### CENA 5 — AS HISTÓRIAS GANHAM VIDA (00:44–00:52)
+### CENA 5 — AS HISTÓRIAS GANHAM VIDA (00:21–00:25)
 **Visual:** pequena cena LEGO fotografada quadro a quadro para criar stop motion; a mesma cena ganha movimento. Transição para galeria de construções de fãs e colecionadores; imagens projetadas em grande tela como créditos finais de cinema. Stop motion deve parecer feito com fotografias sequenciais de peças reais. Não gerar nomes ou créditos falsos.
 
 **Narração:** “Porque as melhores histórias não ficam apenas na tela. Elas também são construídas por nós!”
@@ -74,7 +76,7 @@ Minifiguras aparecem nos cenários. Takes de 2–3 segundos, cada universo visua
 
 **Som:** obturador de câmera, trilha emocionante e sensação de conclusão.
 
-### CENA 6 — A GRANDE ESTREIA (00:52–01:00)
+### CENA 6 — A GRANDE ESTREIA (00:25–00:30)
 **Visual:** peças LEGO encaixam-se em cenário escuro de estúdio e formam composição de claquete e tela de cinema. Câmera revela identidade do evento. Encerramento forte, limpo e centralizado, com espaço para data, local e horário.
 
 **Narração:** “LEGO apresenta: CENA EM CENA. Um festival para entrar nos filmes que marcaram gerações!”
@@ -87,6 +89,8 @@ Minifiguras aparecem nos cenários. Takes de 2–3 segundos, cada universo visua
 **Som:** clímax musical, encaixe de peças e impacto final. Manter título e assinatura tempo suficiente para leitura.
 
 ## Narração integral — preservar exatamente
+
+A locução original deve ser mantida integralmente como texto de referência. Como o filme agora tem 30 segundos, faça um teste de leitura cronometrada/animatic. Ajuste pausas, velocidade e sobreposição com textos na tela para caber sem cortar frases nem tornar a fala ininteligível. Se a locução integral não couber em ritmo natural, sinalize objetivamente a incompatibilidade ao usuário antes de editar o texto; não reescreva a narração por conta própria.
 “Algumas histórias nunca saem da nossa memória...
 E se você pudesse entrar nelas?
 Da magia à ficção científica. Das grandes aventuras aos mundos que marcaram gerações...
@@ -121,7 +125,7 @@ A premium cinematic advertising film set entirely in a detailed miniature world 
 - Preservar a assinatura “Todo filme começa com uma cena.”
 
 ## Entregáveis esperados
-- Vídeo final vertical 9:16, aproximadamente 50–60 s.
+- Vídeo final vertical 9:16, **30 segundos exatos**.
 - Versão com narração PT-BR e legendas.
 - Cenas individuais separadas para edição/substituição.
 - Trilha e efeitos sonoros com direitos adequados.
@@ -132,4 +136,4 @@ A premium cinematic advertising film set entirely in a detailed miniature world 
 Data, local, horário de cada dia, perfil oficial, identidade visual/logotipo oficial, informações de inscrição/entrada e lista de universos/personagens efetivamente autorizados. Não preencher por inferência.
 
 ## Orientação final do briefing
-Priorizar qualidade e continuidade visual. Se necessário escolher entre muitas referências rápidas e poucas cenas memoráveis, escolher poucas cenas bem executadas. O público deve compreender a proposta: entrar em universos cinematográficos, explorar, construir e viver o cinema em LEGO. O vídeo deve terminar despertando vontade de participar.
+Priorizar qualidade e continuidade visual. O filme final tem 30 segundos exatos. Se necessário escolher entre muitas referências rápidas e poucas cenas memoráveis, escolher poucas cenas bem executadas, sem eliminar nenhum dos seis momentos narrativos ou os cinco gêneros exigidos na cena 2. O público deve compreender a proposta: entrar em universos cinematográficos, explorar, construir e viver o cinema em LEGO. O vídeo deve terminar despertando vontade de participar.
